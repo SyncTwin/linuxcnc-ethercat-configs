@@ -1,0 +1,97 @@
+component ptripodkins "AICNC 3-PRS tilting tripod head kinematics (coords Z A B).
+
+Three linear struts hold a rigid platform: strut i runs from base anchor B_i
+(radius RB, angle 90+120*i deg, z=0) to platform anchor P_i (radius RP, same
+angle, platform frame). Platform pose = translate (0,0,Z) then rotate Rx(A)Ry(B).
+Joint i = strut length L_i. Inverse is closed form; forward is Newton on the
+length residuals. Geometry is compile-time (regenerate the .comp to change it).";
+license "GPL";
+;;
+#include "rtapi_math.h"
+#include "kinematics.h"
+
+/* --- geometry (mm), baked by the AICNC robot-tripod constructor --- */
+#define RB  200.0000   /* base anchor circle radius */
+#define RP  120.0000   /* platform anchor circle radius */
+#define ZH  350.0000  /* nominal platform-centre height (datum), informational */
+
+#define D2R (M_PI/180.0)
+#define R2D (180.0/M_PI)
+#define NLEG 3
+
+/* Strut lengths for a platform pose (z, a, b in radians). */
+static void leg_len(double z, double a, double b, double *L) {
+    double ca = cos(a), sa = sin(a), cb = cos(b), sb = sin(b);
+    int i;
+    for (i = 0; i < NLEG; i++) {
+        double phi = D2R * (90.0 + 120.0 * i);
+        double cp = cos(phi), sp = sin(phi);
+        double px = RP * cp, py = RP * sp;          /* platform anchor (platform frame) */
+        /* R = Rx(a)*Ry(b), applied to (px,py,0): */
+        double wx = cb * px;
+        double wy = (sa * sb) * px + ca * py;
+        double wz = z + (-ca * sb) * px + sa * py;
+        double bx = RB * cp, by = RB * sp;          /* base anchor (world) */
+        double dx = wx - bx, dy = wy - by, dz = wz;
+        L[i] = sqrt(dx * dx + dy * dy + dz * dz);
+    }
+}
+
+static double det3(double m[3][3]) {
+    return m[0][0]*(m[1][1]*m[2][2]-m[1][2]*m[2][1])
+         - m[0][1]*(m[1][0]*m[2][2]-m[1][2]*m[2][0])
+         + m[0][2]*(m[1][0]*m[2][1]-m[1][1]*m[2][0]);
+}
+
+/* Solve J*out = r (3x3, Cramer). Returns -1 if singular. */
+static int solve3(double J[3][3], double r[3], double out[3]) {
+    double D = det3(J);
+    if (fabs(D) < 1e-12) return -1;
+    int c, i, k;
+    for (c = 0; c < 3; c++) {
+        double M[3][3];
+        for (i = 0; i < 3; i++) for (k = 0; k < 3; k++) M[i][k] = J[i][k];
+        for (i = 0; i < 3; i++) M[i][c] = r[i];
+        out[c] = det3(M) / D;
+    }
+    return 0;
+}
+
+int kinematicsForward(const double *joint, EmcPose *pos,
+        const KINEMATICS_FORWARD_FLAGS *fflags, KINEMATICS_INVERSE_FLAGS *iflags) {
+    /* Newton on u=(z,a,b): f_i = L_i(u)^2 - joint_i^2. Seed from last pose. */
+    double z = pos->tran.z, a = pos->a * D2R, b = pos->b * D2R;
+    int it, i;
+    for (it = 0; it < 40; it++) {
+        double L[3], f[3], Lz[3], La[3], Lb[3], du[3];
+        double h = 1e-4, J[3][3];
+        leg_len(z, a, b, L);
+        for (i = 0; i < 3; i++) f[i] = L[i]*L[i] - joint[i]*joint[i];
+        leg_len(z + h, a, b, Lz);
+        leg_len(z, a + h, b, La);
+        leg_len(z, a, b + h, Lb);
+        for (i = 0; i < 3; i++) {
+            J[i][0] = (Lz[i]*Lz[i] - L[i]*L[i]) / h;
+            J[i][1] = (La[i]*La[i] - L[i]*L[i]) / h;
+            J[i][2] = (Lb[i]*Lb[i] - L[i]*L[i]) / h;
+        }
+        double r[3] = { -f[0], -f[1], -f[2] };
+        if (solve3(J, r, du) != 0) break;
+        z += du[0]; a += du[1]; b += du[2];
+        if (fabs(du[0]) + fabs(du[1]) + fabs(du[2]) < 1e-9) break;
+    }
+    pos->tran.x = 0.0; pos->tran.y = 0.0; pos->tran.z = z;
+    pos->a = a * R2D; pos->b = b * R2D; pos->c = 0.0;
+    pos->u = pos->v = pos->w = 0.0;
+    return 0;
+}
+
+int kinematicsInverse(const EmcPose *pos, double *joint,
+        const KINEMATICS_INVERSE_FLAGS *iflags, KINEMATICS_FORWARD_FLAGS *fflags) {
+    leg_len(pos->tran.z, pos->a * D2R, pos->b * D2R, joint);
+    return 0;
+}
+
+KINEMATICS_TYPE kinematicsType(void) {
+    return KINEMATICS_BOTH;
+}
