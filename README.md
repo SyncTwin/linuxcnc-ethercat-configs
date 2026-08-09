@@ -71,8 +71,8 @@
 ## Лицензии
 
 - конфигурации и HAL: GPL-2.0, как производные от примеров LinuxCNC
-- реестр устройств `registry/devices.json`: CC BY 4.0, атрибуция
-  «SyncTwin — https://synctwin.ru/ethercat/»
+- реестр устройств `registry/devices.json`: CC BY 4.0, атрибуция:
+  `SyncTwin — https://synctwin.ru/ethercat/`
 
 Файлы ESI производителей здесь не публикуются: это их произведения, распространение
 регулирует ETG. Мы публикуем только собственные наблюдения и производные факты.
