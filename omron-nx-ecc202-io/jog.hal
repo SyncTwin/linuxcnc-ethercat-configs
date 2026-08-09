@@ -1,0 +1,43 @@
+# Jog test HAL: joint 0 = REAL IS620N (bus idx 2), joint 1 = VIRTUAL.
+# Built from the golden minimal_is620n.hal (CSP via cia402 + lcec).
+# pos-scale is a PLACEHOLDER (23-bit = 8388608 counts/rev assumed) — verify
+# against the live encoder before any large move.
+
+loadrt [EMCMOT]EMCMOT servo_period_nsec=[EMCMOT]SERVO_PERIOD num_joints=2
+loadrt lcec
+loadrt cia402 count=1
+loadusr -W lcec_conf jog-ethercat-conf.xml
+
+addf lcec.read-all servo-thread
+addf cia402.0.read-all servo-thread
+addf motion-command-handler servo-thread
+addf motion-controller servo-thread
+addf cia402.0.write-all servo-thread
+addf lcec.write-all servo-thread
+
+# ---- CSP mode for the real drive ----
+setp cia402.0.csp-mode 1
+setp cia402.0.csv-mode 0
+setp cia402.0.fault-autoreset 0
+
+# ===== JOINT 0 — REAL IS620N (bus idx 2) =====
+net j0-statusword     lcec.0.2.cia-statusword      => cia402.0.statusword
+net j0-opmode-display lcec.0.2.opmode-display      => cia402.0.opmode-display
+net j0-drv-act-pos    lcec.0.2.actual-position     => cia402.0.drv-actual-position
+net j0-drv-act-velo   lcec.0.2.actual-velocity     => cia402.0.drv-actual-velocity
+net j0-controlword    cia402.0.controlword         => lcec.0.2.cia-controlword
+net j0-opmode         cia402.0.opmode              => lcec.0.2.opmode
+net j0-drv-target-pos cia402.0.drv-target-position => lcec.0.2.target-position
+net j0-drv-target-velo cia402.0.drv-target-velocity => lcec.0.2.target-velocity
+net j0-enable    joint.0.amp-enable-out => cia402.0.enable
+net j0-amp-fault cia402.0.amp-fault     => joint.0.amp-fault-in
+net j0-pos-cmd   joint.0.motor-pos-cmd  => cia402.0.pos-cmd
+net j0-pos-fb    cia402.0.pos-fb        => joint.0.motor-pos-fb
+setp cia402.0.pos-scale 8388608
+
+# ===== JOINT 1 — VIRTUAL (no hardware: command loops straight to feedback) =====
+net j1-virt-loop joint.1.motor-pos-cmd => joint.1.motor-pos-fb
+setp joint.1.amp-fault-in 0
+
+# ===== ESTOP loop =====
+net estop-out iocontrol.0.user-enable-out => iocontrol.0.emc-enable-in

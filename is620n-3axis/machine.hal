@@ -1,0 +1,170 @@
+# =============================================================================
+# IS620N LinuxCNC HAL — 3-axis EtherCAT bench (basic_cia402 lcec native +
+# cia402.comp state machine ×3) + telemetry sampler for the agent scope plane.
+# =============================================================================
+#
+# What this is:
+#   - 3 REAL Inovance IS620N servo drives over EtherCAT, slave names "x","y","z"
+#     in the lcec XML (ethercat-is620n-full.xml). Each drive runs CSP (Cyclic
+#     Synchronous Position, CiA402 opmode 8) driven by cia402.comp.
+#   - One cia402 instance per axis: cia402.0=X, cia402.1=Y, cia402.2=Z.
+#   - A `sampler` block streams per-axis pos/vel/torque/following-error so the
+#     aicnc-agent can run `halsampler -c 0` and feed the web oscilloscope /
+#     scope plane (12 float channels, fixed column order — see SAMPLER below).
+#   - opmode / opmode-display pins are wired through cia402 so a future
+#     CSP<->CST (position<->torque) mode switch (e.g. for force probing) can be
+#     added without rewiring the drives.
+#
+# Lineage: extends the proven single-real-axis is620n_real_simple.hal — the X
+# block here is a verbatim copy of that file's X wiring; Y and Z replicate it
+# 1:1 against lcec.0.y / lcec.0.z. The old virtual Y/Z loopback is REMOVED.
+#
+# ⚠️ Pin names below (esp. srv-actual-torque / srv-actual-following-error and
+#    the sampler pin syntax) MUST be verified on the live bench with
+#    `halcmd show pin lcec` and `halcmd show pin sampler` before relaunch.
+#    See is620n_full.README.md.
+# =============================================================================
+
+loadrt [KINS]KINEMATICS
+loadrt [EMCMOT]EMCMOT servo_period_nsec=[EMCMOT]SERVO_PERIOD num_joints=[KINS]JOINTS
+loadusr -W lcec_conf /home/cnc/linuxcnc/configs/is620n/ethercat-is620n-full.xml
+loadrt lcec
+loadrt cia402 count=3
+
+# Telemetry sampler: 12 INTEGER channels (3 axes × pos/vel/load/ferr). The lcec
+# srv-actual-* pins are integers (pos/vel/torque = s32, following-error = u32),
+# so the sampler MUST use matching types — float refuses to net ("cannot add pin
+# of type float"). Per-axis order: pos(s) vel(s) load(s) ferr(u), ×3.
+loadrt sampler depth=8192 cfg=sssusssusssu
+
+# ---- servo-thread function order ----------------------------------------------
+# Read drives first, then all cia402 read, then motion, then all cia402 write,
+# then write drives. Sampler reads straight from lcec inputs, so place it right
+# after lcec.read-all (data is freshest there).
+addf lcec.read-all          servo-thread
+addf cia402.0.read-all      servo-thread
+addf cia402.1.read-all      servo-thread
+addf cia402.2.read-all      servo-thread
+addf sampler.0              servo-thread
+addf motion-command-handler servo-thread
+addf motion-controller      servo-thread
+addf cia402.0.write-all     servo-thread
+addf cia402.1.write-all     servo-thread
+addf cia402.2.write-all     servo-thread
+addf lcec.write-all         servo-thread
+
+# =============================================================================
+# AXIS X — real IS620N, basic_cia402 slave "x", joint.0 <-> cia402.0 <-> lcec.0.x
+# =============================================================================
+net x-pos-cmd <= joint.0.motor-pos-cmd
+net x-pos-fb  => joint.0.motor-pos-fb
+net x-enable  <= joint.0.amp-enable-out
+net x-pos-cmd => cia402.0.pos-cmd
+net x-pos-fb  => cia402.0.pos-fb
+net x-enable  => cia402.0.enable
+setp cia402.0.csp-mode 1
+setp cia402.0.pos-scale 838860.8
+net x-statusword      lcec.0.x.srv-cia-statusword   => cia402.0.statusword
+net x-opmode-display  lcec.0.x.srv-opmode-display   => cia402.0.opmode-display
+net x-drv-act-pos     lcec.0.x.srv-actual-position  => cia402.0.drv-actual-position
+net x-drv-act-velo    lcec.0.x.srv-actual-velocity  => cia402.0.drv-actual-velocity
+net x-controlword     cia402.0.controlword          => lcec.0.x.srv-cia-controlword
+net x-modes-of-op     cia402.0.opmode               => lcec.0.x.srv-opmode
+net x-drv-target-pos  cia402.0.drv-target-position  => lcec.0.x.srv-target-position
+net x-drv-target-velo cia402.0.drv-target-velocity  => lcec.0.x.srv-target-velocity
+
+# =============================================================================
+# AXIS Y — real IS620N, basic_cia402 slave "y", joint.1 <-> cia402.1 <-> lcec.0.y
+# =============================================================================
+net y-pos-cmd <= joint.1.motor-pos-cmd
+net y-pos-fb  => joint.1.motor-pos-fb
+net y-enable  <= joint.1.amp-enable-out
+net y-pos-cmd => cia402.1.pos-cmd
+net y-pos-fb  => cia402.1.pos-fb
+net y-enable  => cia402.1.enable
+setp cia402.1.csp-mode 1
+setp cia402.1.pos-scale 838860.8
+net y-statusword      lcec.0.y.srv-cia-statusword   => cia402.1.statusword
+net y-opmode-display  lcec.0.y.srv-opmode-display   => cia402.1.opmode-display
+net y-drv-act-pos     lcec.0.y.srv-actual-position  => cia402.1.drv-actual-position
+net y-drv-act-velo    lcec.0.y.srv-actual-velocity  => cia402.1.drv-actual-velocity
+net y-controlword     cia402.1.controlword          => lcec.0.y.srv-cia-controlword
+net y-modes-of-op     cia402.1.opmode               => lcec.0.y.srv-opmode
+net y-drv-target-pos  cia402.1.drv-target-position  => lcec.0.y.srv-target-position
+net y-drv-target-velo cia402.1.drv-target-velocity  => lcec.0.y.srv-target-velocity
+
+# =============================================================================
+# AXIS Z — real IS620N, basic_cia402 slave "z", joint.2 <-> cia402.2 <-> lcec.0.z
+# =============================================================================
+net z-pos-cmd <= joint.2.motor-pos-cmd
+net z-pos-fb  => joint.2.motor-pos-fb
+net z-enable  <= joint.2.amp-enable-out
+net z-pos-cmd => cia402.2.pos-cmd
+net z-pos-fb  => cia402.2.pos-fb
+net z-enable  => cia402.2.enable
+setp cia402.2.csp-mode 1
+setp cia402.2.pos-scale 838860.8
+net z-statusword      lcec.0.z.srv-cia-statusword   => cia402.2.statusword
+net z-opmode-display  lcec.0.z.srv-opmode-display   => cia402.2.opmode-display
+net z-drv-act-pos     lcec.0.z.srv-actual-position  => cia402.2.drv-actual-position
+net z-drv-act-velo    lcec.0.z.srv-actual-velocity  => cia402.2.drv-actual-velocity
+net z-controlword     cia402.2.controlword          => lcec.0.z.srv-cia-controlword
+net z-modes-of-op     cia402.2.opmode               => lcec.0.z.srv-opmode
+net z-drv-target-pos  cia402.2.drv-target-position  => lcec.0.z.srv-target-position
+net z-drv-target-velo cia402.2.drv-target-velocity  => lcec.0.z.srv-target-velocity
+
+# =============================================================================
+# TELEMETRY SAMPLER — agent scope plane
+# =============================================================================
+# The aicnc-agent reads this with `halsampler -c 0`. Channel order is FIXED and
+# the agent depends on it exactly (12 float columns, after the sampler's leading
+# sample-counter column):
+#
+#   col 0..3  : X.pos  X.vel  X.load  X.ferr   -> sampler.0.pin.0  .. .pin.3
+#   col 4..7  : Y.pos  Y.vel  Y.load  Y.ferr   -> sampler.0.pin.4  .. .pin.7
+#   col 8..11 : Z.pos  Z.vel  Z.load  Z.ferr   -> sampler.0.pin.8  .. .pin.11
+#
+# Sources per axis (all are lcec INPUT pins, read-only here):
+#   pos  = lcec.0.<ax>.srv-actual-position           (counts; same pin cia402 reads)
+#   vel  = lcec.0.<ax>.srv-actual-velocity
+#   load = lcec.0.<ax>.srv-actual-torque             (needs XML enableActualTorque)
+#   ferr = lcec.0.<ax>.srv-actual-following-error    (needs XML enableActualFollowingError)
+#
+# ⚠️ Pin naming convention: sampler input pins are `sampler.<inst>.pin.<N>`,
+#    i.e. sampler.0.pin.0 ... sampler.0.pin.11  (verify: `halcmd show pin sampler`).
+#
+# IMPORTANT (one writer, many readers): srv-actual-position and srv-actual-velocity
+# are ALREADY written onto signals x-drv-act-pos/x-drv-act-velo (etc.) by the
+# axis blocks above — those lcec pins drive those nets. A HAL signal may have
+# exactly ONE writer but MANY readers, so to also feed the sampler we ADD the
+# sampler pin as another READER on the SAME existing net. We do NOT create a new
+# net from the lcec pin (that would be a second writer = HAL error).
+#   -> torque and following-error are NOT yet on any net, so for those we create
+#      fresh nets straight from the lcec pin.
+
+# --- X: pos & vel join the EXISTING axis nets as extra readers ---
+net x-drv-act-pos  => sampler.0.pin.0
+net x-drv-act-velo => sampler.0.pin.1
+# --- X: load & ferr are new signals (lcec pin is the sole writer) ---
+net x-load lcec.0.x.srv-actual-torque           => sampler.0.pin.2
+net x-ferr lcec.0.x.srv-actual-following-error  => sampler.0.pin.3
+
+# --- Y: pos & vel join the EXISTING axis nets as extra readers ---
+net y-drv-act-pos  => sampler.0.pin.4
+net y-drv-act-velo => sampler.0.pin.5
+# --- Y: load & ferr new signals ---
+net y-load lcec.0.y.srv-actual-torque           => sampler.0.pin.6
+net y-ferr lcec.0.y.srv-actual-following-error  => sampler.0.pin.7
+
+# --- Z: pos & vel join the EXISTING axis nets as extra readers ---
+net z-drv-act-pos  => sampler.0.pin.8
+net z-drv-act-velo => sampler.0.pin.9
+# --- Z: load & ferr new signals ---
+net z-load lcec.0.z.srv-actual-torque           => sampler.0.pin.10
+net z-ferr lcec.0.z.srv-actual-following-error  => sampler.0.pin.11
+
+# =============================================================================
+# E-STOP
+# =============================================================================
+net estop-out <= iocontrol.0.user-enable-out
+net estop-out => iocontrol.0.emc-enable-in

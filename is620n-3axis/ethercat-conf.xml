@@ -1,0 +1,111 @@
+<masters>
+  <master idx="0" appTimePeriod="1000000" refClockSyncCycles="1">
+    <slave idx="0" type="generic" vid="0x00000083" pid="0x000000a6" configPdos="false">
+      <dcConf assignActivate="300" sync0Cycle="*1" sync0Shift="0"/>
+      
+      <!-- Outputs с complexEntry -->
+      <syncManager idx="2" dir="out">
+        <pdo idx="1600">
+          <pdoEntry idx="7002" subIdx="01" bitLen="16" halType="complex">
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module1-bit0"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module1-bit1"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module1-bit2"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module1-bit3"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module1-bit4"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module1-bit5"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module1-bit6"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module1-bit7"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module1-bit8"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module1-bit9"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module1-bit10"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module1-bit11"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module1-bit12"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module1-bit13"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module1-bit14"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module1-bit15"/>
+          </pdoEntry>
+        </pdo>
+        <pdo idx="1604">
+          <pdoEntry idx="7022" subIdx="01" bitLen="16" halType="complex">
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module2-bit0"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module2-bit1"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module2-bit2"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module2-bit3"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module2-bit4"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module2-bit5"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module2-bit6"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module2-bit7"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module2-bit8"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module2-bit9"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module2-bit10"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module2-bit11"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module2-bit12"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module2-bit13"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module2-bit14"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module2-bit15"/>
+          </pdoEntry>
+        </pdo>
+        <pdo idx="1608">
+          <pdoEntry idx="7042" subIdx="01" bitLen="16" halType="complex">
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module3-bit0"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module3-bit1"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module3-bit2"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module3-bit3"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module3-bit4"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module3-bit5"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module3-bit6"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module3-bit7"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module3-bit8"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module3-bit9"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module3-bit10"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module3-bit11"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module3-bit12"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module3-bit13"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module3-bit14"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-module3-bit15"/>
+          </pdoEntry>
+        </pdo>
+      </syncManager>
+      
+      <!-- Inputs - ИСПОЛЬЗУЕМ СУЩЕСТВУЮЩИЙ MAPPING -->
+      <syncManager idx="3" dir="in">
+        <pdo idx="1a0c">
+          <pdoEntry idx="6060" subIdx="01" bitLen="1" halPin="din-00" halType="bit"/>
+          <pdoEntry idx="6060" subIdx="02" bitLen="1" halPin="din-01" halType="bit"/>
+          <pdoEntry idx="6060" subIdx="03" bitLen="1" halPin="din-02" halType="bit"/>
+          <pdoEntry idx="6060" subIdx="04" bitLen="1" halPin="din-03" halType="bit"/>
+        </pdo>
+      </syncManager>
+    </slave>
+    <slave idx="1" type="basic_cia402" vid="0x00100000" pid="0x000c0108" name="x">
+      <dcConf assignActivate="300" sync0Cycle="*1"/>
+      <modParam name="enableOpmode" value="true"/>
+      <modParam name="enableCSP" value="true"/>
+    <modParam name="enableCSV" value="true"/>
+    <modParam name="enableCST" value="true"/>
+    <modParam name="enableTargetTorque" value="true"/>
+      <modParam name="enableActualTorque" value="true"/>
+      <modParam name="enableActualFollowingError" value="true"/>
+    </slave>
+    <slave idx="2" type="basic_cia402" vid="0x00100000" pid="0x000c0108" name="y">
+      <dcConf assignActivate="300" sync0Cycle="*1"/>
+      <modParam name="enableOpmode" value="true"/>
+      <modParam name="enableCSP" value="true"/>
+    <modParam name="enableCSV" value="true"/>
+    <modParam name="enableCST" value="true"/>
+    <modParam name="enableTargetTorque" value="true"/>
+      <modParam name="enableActualTorque" value="true"/>
+      <modParam name="enableActualFollowingError" value="true"/>
+    </slave>
+    <slave idx="3" type="basic_cia402" vid="0x00100000" pid="0x000c0108" name="z">
+      <dcConf assignActivate="300" sync0Cycle="*1"/>
+      <modParam name="enableOpmode" value="true"/>
+      <modParam name="enableCSP" value="true"/>
+    <modParam name="enableCSV" value="true"/>
+    <modParam name="enableCST" value="true"/>
+    <modParam name="enableTargetTorque" value="true"/>
+      <modParam name="enableActualTorque" value="true"/>
+      <modParam name="enableActualFollowingError" value="true"/>
+    </slave>
+  </master>
+</masters>
