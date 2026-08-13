@@ -103,13 +103,16 @@ sudo make install
 ### Вариант Б — из нашего APT-репозитория
 
 ```bash
-curl -fsSL https://synctwin.ru/apt/synctwin.gpg \
-  | sudo tee /usr/share/keyrings/synctwin.gpg >/dev/null
-echo "deb [signed-by=/usr/share/keyrings/synctwin.gpg] https://synctwin.ru/apt/ stable main" \
+curl -fsSL https://synctwin.ru/synctwin-archive-keyring.gpg \
+  | sudo tee /usr/share/keyrings/synctwin-archive-keyring.gpg >/dev/null
+echo "deb [signed-by=/usr/share/keyrings/synctwin-archive-keyring.gpg] https://synctwin.ru/apt ./" \
   | sudo tee /etc/apt/sources.list.d/synctwin.list
 sudo apt-get update
 sudo apt-get install -y linuxcnc-ethercat
 ```
+
+Репозиторий плоский (`./`), не `stable main` — это видно по тому, что рядом с
+пакетами лежат `Packages` и `InRelease`, а каталога `dists/` нет.
 
 Если пакет удерживается (`hold`), сначала снимите удержание:
 
