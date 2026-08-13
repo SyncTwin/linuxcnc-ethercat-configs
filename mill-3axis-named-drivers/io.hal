@@ -1,0 +1,10 @@
+# =============================================================================
+# io.hal — classic-obвес wiring (GENERATED, additive overlay, load LAST).
+# =============================================================================
+# Nets bound DI/DO roles (Machine.io_channels) to their LinuxCNC pins. Цепь
+# «Стоп», авария частотника и автосменщик разводятся в HAL станка — их пины
+# он уже подписал, и второй net сюда не встанет. Do not hand-edit —
+# regenerated from the twin.
+# =============================================================================
+
+net io-limit_x_min lcec.0.4.din-03 => joint.0.neg-lim-sw-in

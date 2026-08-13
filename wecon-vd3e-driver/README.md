@@ -8,6 +8,54 @@ Free software, GPL v2, same license as the project it belongs to.
 > from the vendor ESI or from a live drive on our bench — each row says which.
 > Bench results are added here as they are taken.
 
+## Bench result, 2026-08-13
+
+The drive reaches `OP` with this driver. Bus: five slaves — three Inovance
+IS620N, the VD3E at chain position 3, and an Omron NX-ECC202 coupler. LinuxCNC
+servo period 1 ms.
+
+```
+0  0:0  OP     +  IS620N_ECAT_v2.6.8
+1  0:1  OP     +  IS620N_ECAT_v2.6.8
+2  0:2  OP     +  IS620N_ECAT_v2.6.8
+3  0:3  OP     +  Wecon VD3E EtherCAT Servo v1.15
+4  0:4  PREOP  +  NX-ECC202 EtherCAT coupler V1.2   <- not in the config on purpose
+
+lcec.0.s.slave-state-op            TRUE
+lcec.0.s.srv-cia-statusword        0x00000250
+lcec.0.s.srv-error-code            0x00000000
+lcec.0.s.srv-supported-modes       0x000003AD
+  pp TRUE · pv TRUE · tq TRUE · hm TRUE · csp TRUE · csv TRUE · ip FALSE
+lcec.0.s.srv-actual-position       live
+lcec.0.s.srv-actual-velocity       live
+lcec.0.s.srv-actual-following-error 0
+```
+
+Note that `0x6502` reads `0x03AD` — byte for byte the same mode set the Inovance
+drives on the same bus report. Two unrelated vendors, identical claim.
+
+### Distributed clocks: the setting that decides everything
+
+DC convergence on this bus depends entirely on `refClockSyncCycles`, and the
+difference is not subtle:
+
+| | `refClockSyncCycles="1"` | `refClockSyncCycles="-1"` |
+|---|---|---|
+| `dc-sync-converged` | FALSE | **TRUE** |
+| `dc-sync-diff` after 40 s | 0x0011EFFF = 1 175 551 ns | 0x67 = **103 ns** |
+| `phase-jitter` | 22 634 | **0** |
+| `pll-err` | 148 137 | 4 689 |
+
+`-1` means the master follows the reference clock (master-to-reference)
+instead of pulling it. With a positive value the clocks drift apart linearly and
+never settle. This matches what we measured separately on 2026-08-12, and it is
+also the first time we can show the "better than 100 ns inside one bus" figure
+from our own bench rather than from the literature.
+
+If you configure only one slave out of a longer chain, the master reports
+`Failed to get reference clock time` — the reference clock lives on the first
+DC-capable slave, and it has to be in your configuration too.
+
 ## Why this driver exists
 
 `linuxcnc-ethercat` supports 272 devices from nine vendors. **209 of them are
