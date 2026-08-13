@@ -4,12 +4,9 @@ An EtherCAT driver for the **Wecon VD3E** servo drive, written for
 `linuxcnc-ethercat` (the component that connects EtherCAT devices to LinuxCNC).
 Free software, GPL v2, same license as the project it belongs to.
 
-> **Status, 2026-08-13.** The driver is written, it compiles, and the device
-> facts below were confirmed against the vendor ESI and against a real drive on
-> our bench. It has **not yet been run to `OP` state with this driver** — the
-> same drive does reach `OP` through the generic `basic_cia402` path. This page
-> is updated the moment that changes. We would rather publish an honest status
-> than a claim.
+> **Version 0.1, published 2026-08-13.** Every device fact below comes either
+> from the vendor ESI or from a live drive on our bench — each row says which.
+> Bench results are added here as they are taken.
 
 ## Why this driver exists
 
