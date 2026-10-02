@@ -1,0 +1,62 @@
+# SFC "feeder" on stock LinuxCNC HAL: ClassicLadder runs the steps and transitions,
+# a stand-in axis made of stock components plays the role of MC_MoveAbsolute.
+#
+#   feeder.sfc  - the program in IEC 61131-3 SFC text (what the author writes)
+#   feeder.clp  - the same program as ClassicLadder Grafcet + ladder rungs
+#   feeder.hal  - this file: realtime thread, ClassicLadder, axis stand-in, wiring
+#
+# Runs in plain `halrun` (package linuxcnc-uspace), no LinuxCNC motion, no hardware.
+
+loadrt threads name1=plc period1=1000000          # 1 ms scan
+
+# --- ClassicLadder: sizes are exactly what feeder.clp uses ---------------------------
+loadrt classicladder_rt numRungs=11 numBits=8 numWords=0 numTimers=1 numMonostables=0 numCounters=0 numPhysInputs=5 numPhysOutputs=8 numArithmExpr=8 numSections=2 numS32in=1 numS32out=1 numFloatIn=3 numFloatOut=2
+addf classicladder.0.refresh plc
+loadusr -w classicladder --nogui feeder.clp
+
+# VAR_INPUT of the program = ClassicLadder %IF (live knobs, change them with setp)
+setp classicladder.0.floatin-00 20      # stroke, mm
+setp classicladder.0.floatin-01 6       # v_fwd, mm/s
+setp classicladder.0.floatin-02 10      # v_back, mm/s
+
+# --- operator / safety inputs ---------------------------------------------------------
+net enable     classicladder.0.in-00          # %I0 run permission from the operator
+net permit     classicladder.0.in-04          # %I4 E-stop chain OK AND fieldbus in OP
+net hold       classicladder.0.in-03          # %I3 Hold: transitions freeze, axis halts
+net part       classicladder.0.in-01          # %I1 part sensor (rising edge starts a cycle)
+net gate       classicladder.0.out-06         # %Q6 gate valve output
+
+# step activity X1..X4 as HAL pins (for halscope, a panel, or another node)
+net X1-wait_part classicladder.0.out-02
+net X2-push      classicladder.0.out-03
+net X3-dwell     classicladder.0.out-04
+net X4-retract   classicladder.0.out-05
+
+# --- axis stand-in: MC_MoveAbsolute out of stock components --------------------------
+# In a real cell these pins go to a PLCopen axis state machine in front of a CiA 402
+# drive. Here: power -> state 1 (Standstill), Execute -> ramp to Position at Velocity,
+# Done = arrived AND Execute.
+loadrt conv_bit_s32 count=1
+loadrt mux2 count=1
+loadrt limit3 count=1
+loadrt near count=1
+loadrt and2 count=1
+addf conv-bit-s32.0 plc
+addf mux2.0 plc
+addf limit3.0 plc
+addf near.0 plc
+addf and2.0 plc
+
+net ax-power   classicladder.0.out-01  => conv-bit-s32.0.in       # %Q1 MC_Power.Enable
+net ax-state   conv-bit-s32.0.out      => classicladder.0.s32in-00 # %IW0 axis state
+net ax-mode    classicladder.0.s32out-00                          # %QW0 move kind: 0 absolute, 1 relative, 2 velocity (unused here)
+net ax-exec    classicladder.0.out-00  => mux2.0.sel and2.0.in1   # %Q0 Execute
+net ax-target  classicladder.0.floatout-00 => mux2.0.in1 near.0.in2 # %QF0 Position
+net ax-vel     classicladder.0.floatout-01 => limit3.0.maxv       # %QF1 Velocity
+net ax-halt    classicladder.0.out-07                             # %Q7 MC_Halt (not used by the stand-in)
+net ax-cmd     mux2.0.out => limit3.0.in
+net ax-pos     limit3.0.out => mux2.0.in0 near.0.in1              # no Execute -> hold position
+net ax-near    near.0.out => and2.0.in0
+net ax-done    and2.0.out => classicladder.0.in-02                # %I2 Done
+setp limit3.0.maxa 50                                             # mm/s^2
+setp near.0.difference 0.001

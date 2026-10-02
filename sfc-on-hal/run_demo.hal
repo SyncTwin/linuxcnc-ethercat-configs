@@ -1,0 +1,41 @@
+# Demo run: one full cycle, then a second part. Usage: halrun -f run_demo.hal
+source feeder.hal
+start
+
+loadusr -w echo "--- t=0.0 enable, no part yet"
+sets permit 1
+sets enable 1
+loadusr -w sleep 0.3
+show sig X
+show sig ax-
+
+loadusr -w echo "--- t=0.3 part arrives (rising edge)"
+sets part 1
+loadusr -w sleep 1.0
+show sig X
+show sig ax-
+show sig gate
+
+loadusr -w echo "--- t=4.3 stroke done, dwell 2 s"
+loadusr -w sleep 3.0
+show sig X
+show sig ax-pos
+
+loadusr -w echo "--- t=6.6 dwell over, retracting"
+loadusr -w sleep 2.3
+show sig X
+show sig ax-
+show sig gate
+
+loadusr -w echo "--- t=9.6 back home; part still TRUE, but no new edge -> stays waiting"
+loadusr -w sleep 3.0
+show sig X
+show sig ax-pos
+
+loadusr -w echo "--- t=12.6 part removed and a new one arrives"
+sets part 0
+loadusr -w sleep 0.1
+sets part 1
+loadusr -w sleep 0.5
+show sig X
+show sig ax-pos

@@ -1,0 +1,222 @@
+# Real output of: halrun -f run_demo.hal
+# linuxcnc-uspace 2.9.0~pre1 (Debian 12 package), POSIX non-realtime, in a container, 2026-10-02
+# Times in the markers are the script's sleeps, not measured; repeated 'Running with fallback_uid' lines removed.
+
+Note: Using POSIX non-realtime
+INFO CLASSICLADDER-   No ladder GUI requested-Realtime runs till HAL closes.
+"--- t=0.0 enable, no part yet"
+Signals:
+Type          Value  Name     (linked to)
+bit            TRUE  X1-wait_part
+                         <== classicladder.0.out-02
+bit           FALSE  X2-push
+                         <== classicladder.0.out-03
+bit           FALSE  X3-dwell
+                         <== classicladder.0.out-04
+bit           FALSE  X4-retract
+                         <== classicladder.0.out-05
+
+Signals:
+Type          Value  Name     (linked to)
+float             0  ax-cmd
+                         ==> limit3.0.in
+                         <== mux2.0.out
+bit           FALSE  ax-done
+                         <== and2.0.out
+                         ==> classicladder.0.in-02
+bit           FALSE  ax-exec
+                         ==> and2.0.in1
+                         <== classicladder.0.out-00
+                         ==> mux2.0.sel
+bit           FALSE  ax-halt
+                         <== classicladder.0.out-07
+s32               0  ax-mode
+                         <== classicladder.0.s32out-00
+bit            TRUE  ax-near
+                         ==> and2.0.in0
+                         <== near.0.out
+float             0  ax-pos
+                         <== limit3.0.out
+                         ==> mux2.0.in0
+                         ==> near.0.in1
+bit            TRUE  ax-power
+                         <== classicladder.0.out-01
+                         ==> conv-bit-s32.0.in
+s32               1  ax-state
+                         ==> classicladder.0.s32in-00
+                         <== conv-bit-s32.0.out
+float             0  ax-target
+                         <== classicladder.0.floatout-00
+                         ==> mux2.0.in1
+                         ==> near.0.in2
+float             0  ax-vel
+                         <== classicladder.0.floatout-01
+                         ==> limit3.0.maxv
+
+"--- t=0.3 part arrives (rising edge)"
+Signals:
+Type          Value  Name     (linked to)
+bit           FALSE  X1-wait_part
+                         <== classicladder.0.out-02
+bit            TRUE  X2-push
+                         <== classicladder.0.out-03
+bit           FALSE  X3-dwell
+                         <== classicladder.0.out-04
+bit           FALSE  X4-retract
+                         <== classicladder.0.out-05
+
+Signals:
+Type          Value  Name     (linked to)
+float            20  ax-cmd
+                         ==> limit3.0.in
+                         <== mux2.0.out
+bit           FALSE  ax-done
+                         <== and2.0.out
+                         ==> classicladder.0.in-02
+bit            TRUE  ax-exec
+                         ==> and2.0.in1
+                         <== classicladder.0.out-00
+                         ==> mux2.0.sel
+bit           FALSE  ax-halt
+                         <== classicladder.0.out-07
+s32               0  ax-mode
+                         <== classicladder.0.s32out-00
+bit           FALSE  ax-near
+                         ==> and2.0.in0
+                         <== near.0.out
+float         5.637  ax-pos
+                         <== limit3.0.out
+                         ==> mux2.0.in0
+                         ==> near.0.in1
+bit            TRUE  ax-power
+                         <== classicladder.0.out-01
+                         ==> conv-bit-s32.0.in
+s32               1  ax-state
+                         ==> classicladder.0.s32in-00
+                         <== conv-bit-s32.0.out
+float            20  ax-target
+                         <== classicladder.0.floatout-00
+                         ==> mux2.0.in1
+                         ==> near.0.in2
+float             6  ax-vel
+                         <== classicladder.0.floatout-01
+                         ==> limit3.0.maxv
+
+Signals:
+Type          Value  Name     (linked to)
+bit            TRUE  gate
+                         <== classicladder.0.out-06
+
+"--- t=4.3 stroke done, dwell 2 s"
+Signals:
+Type          Value  Name     (linked to)
+bit           FALSE  X1-wait_part
+                         <== classicladder.0.out-02
+bit           FALSE  X2-push
+                         <== classicladder.0.out-03
+bit            TRUE  X3-dwell
+                         <== classicladder.0.out-04
+bit           FALSE  X4-retract
+                         <== classicladder.0.out-05
+
+Signals:
+Type          Value  Name     (linked to)
+float      19.99995  ax-pos
+                         <== limit3.0.out
+                         ==> mux2.0.in0
+                         ==> near.0.in1
+
+"--- t=6.6 dwell over, retracting"
+Signals:
+Type          Value  Name     (linked to)
+bit           FALSE  X1-wait_part
+                         <== classicladder.0.out-02
+bit           FALSE  X2-push
+                         <== classicladder.0.out-03
+bit           FALSE  X3-dwell
+                         <== classicladder.0.out-04
+bit            TRUE  X4-retract
+                         <== classicladder.0.out-05
+
+Signals:
+Type          Value  Name     (linked to)
+float             0  ax-cmd
+                         ==> limit3.0.in
+                         <== mux2.0.out
+bit           FALSE  ax-done
+                         <== and2.0.out
+                         ==> classicladder.0.in-02
+bit            TRUE  ax-exec
+                         ==> and2.0.in1
+                         <== classicladder.0.out-00
+                         ==> mux2.0.sel
+bit           FALSE  ax-halt
+                         <== classicladder.0.out-07
+s32               0  ax-mode
+                         <== classicladder.0.s32out-00
+bit           FALSE  ax-near
+                         ==> and2.0.in0
+                         <== near.0.out
+float      12.41495  ax-pos
+                         <== limit3.0.out
+                         ==> mux2.0.in0
+                         ==> near.0.in1
+bit            TRUE  ax-power
+                         <== classicladder.0.out-01
+                         ==> conv-bit-s32.0.in
+s32               1  ax-state
+                         ==> classicladder.0.s32in-00
+                         <== conv-bit-s32.0.out
+float             0  ax-target
+                         <== classicladder.0.floatout-00
+                         ==> mux2.0.in1
+                         ==> near.0.in2
+float            10  ax-vel
+                         <== classicladder.0.floatout-01
+                         ==> limit3.0.maxv
+
+Signals:
+Type          Value  Name     (linked to)
+bit           FALSE  gate
+                         <== classicladder.0.out-06
+
+"--- t=9.6 back home; part still TRUE, but no new edge -> stays waiting"
+Signals:
+Type          Value  Name     (linked to)
+bit            TRUE  X1-wait_part
+                         <== classicladder.0.out-02
+bit           FALSE  X2-push
+                         <== classicladder.0.out-03
+bit           FALSE  X3-dwell
+                         <== classicladder.0.out-04
+bit           FALSE  X4-retract
+                         <== classicladder.0.out-05
+
+Signals:
+Type          Value  Name     (linked to)
+float  -4.495441e-11  ax-pos
+                         <== limit3.0.out
+                         ==> mux2.0.in0
+                         ==> near.0.in1
+
+"--- t=12.6 part removed and a new one arrives"
+Signals:
+Type          Value  Name     (linked to)
+bit           FALSE  X1-wait_part
+                         <== classicladder.0.out-02
+bit            TRUE  X2-push
+                         <== classicladder.0.out-03
+bit           FALSE  X3-dwell
+                         <== classicladder.0.out-04
+bit           FALSE  X4-retract
+                         <== classicladder.0.out-05
+
+Signals:
+Type          Value  Name     (linked to)
+float         2.637  ax-pos
+                         <== limit3.0.out
+                         ==> mux2.0.in0
+                         ==> near.0.in1
+
+creating ladder-state
+Note: Using POSIX non-realtime

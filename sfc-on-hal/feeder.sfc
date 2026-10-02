@@ -1,0 +1,46 @@
+PROGRAM Feeder
+VAR_INPUT
+  stroke : REAL := 20.0;
+  v_fwd  : REAL := 6.0;
+  v_back : REAL := 10.0;
+END_VAR
+VAR
+  part_edge : R_TRIG;
+END_VAR
+INITIAL_STEP wait_part:
+  watch_part(N);
+END_STEP
+TRANSITION FROM wait_part TO push := part_edge.Q;
+END_TRANSITION
+STEP push:
+  gate_open(N);
+  pusher_fwd(N);
+END_STEP
+TRANSITION FROM push TO dwell := srv0.Done;
+END_TRANSITION
+STEP dwell:
+END_STEP
+TRANSITION FROM dwell TO retract := dwell.T >= T#2s;
+END_TRANSITION
+STEP retract:
+  gate_close(N);
+  pusher_back(N);
+END_STEP
+TRANSITION FROM retract TO wait_part := srv0.Done;
+END_TRANSITION
+ACTION watch_part:
+  part_edge(CLK := part);
+END_ACTION
+ACTION gate_open:
+  gate := TRUE;
+END_ACTION
+ACTION gate_close:
+  gate := FALSE;
+END_ACTION
+ACTION pusher_fwd:
+  MC_MoveAbsolute(Axis := srv0, Position := stroke, Velocity := v_fwd);
+END_ACTION
+ACTION pusher_back:
+  MC_MoveAbsolute(Axis := srv0, Position := 0.0, Velocity := v_back);
+END_ACTION
+END_PROGRAM

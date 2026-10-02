@@ -20,6 +20,8 @@
 | [`rt-vm-tuning/`](rt-vm-tuning/) | LinuxCNC в виртуалке: изоляция ядер хоста и гостя, pinning целыми физическими ядрами, запрет C-states | KVM/libvirt |
 | [`measuring/`](measuring/) | как замерить отставание, задержки планировщика и ошибки на линии | штатные средства LinuxCNC |
 | [`sdo-probing/`](sdo-probing/) | проверить привод одними SDO без LinuxCNC: лесенка CiA 402, шкала энкодера, электронный редуктор, стоимость обмена | Wecon VD3E, Inovance IS620N |
+| [`hal-plc-testcases/`](hal-plc-testcases/) | 18 кейсов «стандартная библиотека МЭК 61131-3 против штатного HAL»: TON, TOF, R_TRIG, SR, CTU, PID, watchdog… с логами прогонов | только `halrun` |
+| [`sfc-on-hal/`](sfc-on-hal/) | последовательность SFC (шаги, переходы по датчику, таймеру и ходу оси) на ClassicLadder + HAL с реальным логом прогона | только `halrun` |
 | [`registry/`](registry/) | реестр устройств: идентификаторы, поддержка SDO-Info, грабли | 6 устройств |
 
 ## Прежде чем запускать
