@@ -1,0 +1,38 @@
+# SFC "tank" on stock LinuxCNC HAL: fill to the high level, mix for t_mix, drain to empty.
+#
+#   tank.sfc - the program in IEC 61131-3 SFC text (what the author writes)
+#   tank.clp - the same program as ClassicLadder Grafcet + ladder rungs
+#   tank.hal - this file: realtime thread, ClassicLadder, wiring
+#
+# Runs in plain `halrun` (package linuxcnc-uspace), no LinuxCNC motion, no hardware.
+# Level sensors are not simulated: the demo script sets them by hand with `sets`.
+
+loadrt threads name1=plc period1=1000000          # 1 ms scan
+
+# --- ClassicLadder: sizes are what tank.clp uses, but the HAL pin arrays (s32in, s32out,
+# floatin, floatout) are at least 1: with 0 classicladder_rt brings HAL down at the first scan
+loadrt classicladder_rt numRungs=7 numBits=6 numWords=0 numTimers=1 numMonostables=0 numCounters=0 numPhysInputs=6 numPhysOutputs=7 numArithmExpr=1 numSections=2 numS32in=1 numS32out=1 numFloatIn=1 numFloatOut=1
+addf classicladder.0.refresh plc
+loadusr -w classicladder --nogui tank.clp
+
+# VAR_INPUT of the program = ClassicLadder %IF, TIME in milliseconds (live knob)
+setp classicladder.0.floatin-00 3000    # t_mix
+
+# --- operator / safety inputs ---------------------------------------------------------
+net enable     classicladder.0.in-00          # %I0 run permission from the operator
+net start      classicladder.0.in-01          # %I1 start button (rising edge starts a batch)
+net level-high classicladder.0.in-02          # %I2 level sensor: tank full
+net level-low  classicladder.0.in-03          # %I3 level sensor: something in the tank
+net hold       classicladder.0.in-04          # %I4 Hold
+net permit     classicladder.0.in-05          # %I5 E-stop chain OK
+
+# --- valves and mixer (program outputs) -----------------------------------------------
+net drain-valve classicladder.0.out-04        # %Q4
+net inlet       classicladder.0.out-05        # %Q5
+net mixer       classicladder.0.out-06        # %Q6
+
+# step activity X1..X4 as HAL pins
+net X1-idle  classicladder.0.out-00
+net X2-fill  classicladder.0.out-01
+net X3-mix   classicladder.0.out-02
+net X4-drain classicladder.0.out-03

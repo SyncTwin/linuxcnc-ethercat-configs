@@ -17,7 +17,7 @@
 ```bash
 sudo apt update
 sudo apt install linuxcnc-uspace
-cd hal-testcases
+cd hal-plc-testcases
 ./run_all.sh
 ```
 

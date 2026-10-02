@@ -1,0 +1,34 @@
+PROGRAM TrafficLight
+VAR_INPUT
+  t_red    : TIME := T#3s;
+  t_green  : TIME := T#3s;
+  t_yellow : TIME := T#1s;
+END_VAR
+INITIAL_STEP red:
+  red_on(N);
+END_STEP
+TRANSITION FROM red TO green := red.T >= t_red;
+END_TRANSITION
+STEP green:
+  green_on(N);
+END_STEP
+TRANSITION FROM green TO yellow := green.T >= t_green;
+END_TRANSITION
+STEP yellow:
+  yellow_on(N);
+END_STEP
+TRANSITION FROM yellow TO red := yellow.T >= t_yellow;
+END_TRANSITION
+ACTION red_on:
+  lamp_yellow := FALSE;
+  lamp_red := TRUE;
+END_ACTION
+ACTION green_on:
+  lamp_red := FALSE;
+  lamp_green := TRUE;
+END_ACTION
+ACTION yellow_on:
+  lamp_green := FALSE;
+  lamp_yellow := TRUE;
+END_ACTION
+END_PROGRAM

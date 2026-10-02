@@ -1,0 +1,35 @@
+# SFC "traffic light" on stock LinuxCNC HAL: three steps, each held by a step timer.
+#
+#   traffic_light.sfc - the program in IEC 61131-3 SFC text (what the author writes)
+#   traffic_light.clp - the same program as ClassicLadder Grafcet + ladder rungs
+#   traffic_light.hal - this file: realtime thread, ClassicLadder, wiring
+#
+# Runs in plain `halrun` (package linuxcnc-uspace), no LinuxCNC motion, no hardware.
+
+loadrt threads name1=plc period1=1000000          # 1 ms scan
+
+# --- ClassicLadder: sizes are what traffic_light.clp uses, but the HAL pin arrays (s32in, s32out,
+# floatin, floatout) are at least 1: with 0 classicladder_rt brings HAL down at the first scan
+loadrt classicladder_rt numRungs=7 numBits=4 numWords=0 numTimers=3 numMonostables=0 numCounters=0 numPhysInputs=3 numPhysOutputs=6 numArithmExpr=3 numSections=2 numS32in=1 numS32out=1 numFloatIn=3 numFloatOut=1
+addf classicladder.0.refresh plc
+loadusr -w classicladder --nogui traffic_light.clp
+
+# VAR_INPUT of the program = ClassicLadder %IF, TIME in milliseconds (live knobs, change with setp)
+setp classicladder.0.floatin-00 3000    # t_red
+setp classicladder.0.floatin-01 3000    # t_green
+setp classicladder.0.floatin-02 1000    # t_yellow
+
+# --- operator / safety inputs ---------------------------------------------------------
+net enable     classicladder.0.in-00          # %I0 run permission from the operator
+net hold       classicladder.0.in-01          # %I1 Hold: step time pauses, no transitions
+net permit     classicladder.0.in-02          # %I2 E-stop chain OK
+
+# --- lamps (program outputs) ----------------------------------------------------------
+net lamp-yellow classicladder.0.out-03        # %Q3
+net lamp-red    classicladder.0.out-04        # %Q4
+net lamp-green  classicladder.0.out-05        # %Q5
+
+# step activity X1..X3 as HAL pins (for halscope, a panel, or another node)
+net X1-red    classicladder.0.out-00
+net X2-green  classicladder.0.out-01
+net X3-yellow classicladder.0.out-02

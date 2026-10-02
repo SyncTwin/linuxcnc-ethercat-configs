@@ -1,0 +1,115 @@
+# Real output of: halrun -f run_demo.hal
+# linuxcnc-uspace 2.9.0~pre1 (Debian 12 package), POSIX non-realtime, in a container, 2026-10-02
+# Times in the markers are the script's sleeps, not measured; repeated 'Running with fallback_uid' lines removed.
+
+Note: Using POSIX non-realtime
+INFO CLASSICLADDER-   No ladder GUI requested-Realtime runs till HAL closes.
+"--- t=0.0 enable, tank empty"
+Signals:
+Type          Value  Name     (linked to)
+bit            TRUE  X1-idle
+                         <== classicladder.0.out-00
+bit           FALSE  X2-fill
+                         <== classicladder.0.out-01
+bit           FALSE  X3-mix
+                         <== classicladder.0.out-02
+bit           FALSE  X4-drain
+                         <== classicladder.0.out-03
+
+Signals:
+Type          Value  Name     (linked to)
+bit           FALSE  inlet
+                         <== classicladder.0.out-05
+
+"--- t=0.3 start pressed"
+Signals:
+Type          Value  Name     (linked to)
+bit           FALSE  X1-idle
+                         <== classicladder.0.out-00
+bit            TRUE  X2-fill
+                         <== classicladder.0.out-01
+bit           FALSE  X3-mix
+                         <== classicladder.0.out-02
+bit           FALSE  X4-drain
+                         <== classicladder.0.out-03
+
+Signals:
+Type          Value  Name     (linked to)
+bit            TRUE  inlet
+                         <== classicladder.0.out-05
+
+"--- t=1.6 liquid covers the low sensor, then the high one"
+Signals:
+Type          Value  Name     (linked to)
+bit           FALSE  X1-idle
+                         <== classicladder.0.out-00
+bit           FALSE  X2-fill
+                         <== classicladder.0.out-01
+bit            TRUE  X3-mix
+                         <== classicladder.0.out-02
+bit           FALSE  X4-drain
+                         <== classicladder.0.out-03
+
+Signals:
+Type          Value  Name     (linked to)
+bit           FALSE  inlet
+                         <== classicladder.0.out-05
+
+Signals:
+Type          Value  Name     (linked to)
+bit            TRUE  mixer
+                         <== classicladder.0.out-06
+
+"--- t=4.6 mixing time over, draining"
+Signals:
+Type          Value  Name     (linked to)
+bit           FALSE  X1-idle
+                         <== classicladder.0.out-00
+bit           FALSE  X2-fill
+                         <== classicladder.0.out-01
+bit           FALSE  X3-mix
+                         <== classicladder.0.out-02
+bit            TRUE  X4-drain
+                         <== classicladder.0.out-03
+
+Signals:
+Type          Value  Name     (linked to)
+bit           FALSE  mixer
+                         <== classicladder.0.out-06
+
+Signals:
+Type          Value  Name     (linked to)
+bit            TRUE  drain-valve
+                         <== classicladder.0.out-04
+
+"--- t=5.6 level drops below both sensors"
+Signals:
+Type          Value  Name     (linked to)
+bit           FALSE  X1-idle
+                         <== classicladder.0.out-00
+bit           FALSE  X2-fill
+                         <== classicladder.0.out-01
+bit           FALSE  X3-mix
+                         <== classicladder.0.out-02
+bit            TRUE  X4-drain
+                         <== classicladder.0.out-03
+
+"--- t=6.6 tank empty"
+Signals:
+Type          Value  Name     (linked to)
+bit            TRUE  X1-idle
+                         <== classicladder.0.out-00
+bit           FALSE  X2-fill
+                         <== classicladder.0.out-01
+bit           FALSE  X3-mix
+                         <== classicladder.0.out-02
+bit           FALSE  X4-drain
+                         <== classicladder.0.out-03
+
+Signals:
+Type          Value  Name     (linked to)
+bit           FALSE  drain-valve
+                         <== classicladder.0.out-04
+
+creating ladder-state
+Note: Using POSIX non-realtime

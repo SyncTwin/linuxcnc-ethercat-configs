@@ -1,0 +1,37 @@
+# SFC "sorter" on stock LinuxCNC HAL: a part stops at the gauge, a tall part is pushed off
+# into the reject bin, a normal part goes on. After 3 rejects the line waits for an empty bin.
+#
+#   sorter.sfc - the program in IEC 61131-3 SFC text (what the author writes)
+#   sorter.clp - the same program as ClassicLadder Grafcet + ladder rungs
+#   sorter.hal - this file: realtime thread, ClassicLadder, wiring
+#
+# Runs in plain `halrun` (package linuxcnc-uspace), no LinuxCNC motion, no hardware.
+# Sensors are not simulated: the demo script sets them by hand with `sets`.
+
+loadrt threads name1=plc period1=1000000          # 1 ms scan
+
+# --- ClassicLadder: sizes are what sorter.clp uses, but the HAL pin arrays (s32in, s32out,
+# floatin, floatout) are at least 1: with 0 classicladder_rt brings HAL down at the first scan
+loadrt classicladder_rt numRungs=10 numBits=11 numWords=0 numTimers=3 numMonostables=0 numCounters=1 numPhysInputs=6 numPhysOutputs=8 numArithmExpr=0 numSections=2 numS32in=1 numS32out=1 numFloatIn=1 numFloatOut=1
+addf classicladder.0.refresh plc
+loadusr -w classicladder --nogui sorter.clp
+
+# --- operator / safety inputs ---------------------------------------------------------
+net enable      classicladder.0.in-00         # %I0 run permission from the operator
+net part        classicladder.0.in-01         # %I1 part at the gauge (rising edge)
+net tall        classicladder.0.in-02         # %I2 height sensor: part too tall
+net bin-emptied classicladder.0.in-03         # %I3 operator emptied the reject bin
+net hold        classicladder.0.in-04         # %I4 Hold
+net permit      classicladder.0.in-05         # %I5 E-stop chain OK
+
+# --- outputs --------------------------------------------------------------------------
+net belt          classicladder.0.out-05      # %Q5 conveyor motor
+net pusher        classicladder.0.out-06      # %Q6 reject pusher
+net bin-full-lamp classicladder.0.out-07      # %Q7 lamp "reject bin full"
+
+# step activity X1..X5 as HAL pins
+net X1-wait_part classicladder.0.out-00
+net X2-check     classicladder.0.out-01
+net X3-reject    classicladder.0.out-02
+net X4-pass      classicladder.0.out-03
+net X5-bin_full  classicladder.0.out-04

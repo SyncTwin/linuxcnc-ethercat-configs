@@ -1,0 +1,38 @@
+# Demo run: two full cycles of the light. Usage: halrun -f run_demo.hal
+source traffic_light.hal
+start
+
+loadusr -w echo "--- t=0.0 enable"
+sets permit 1
+sets enable 1
+loadusr -w sleep 0.5
+show sig X
+show sig lamp
+
+loadusr -w echo "--- t=3.5 red time over"
+loadusr -w sleep 3.0
+show sig X
+show sig lamp
+
+loadusr -w echo "--- t=6.5 green time over"
+loadusr -w sleep 3.0
+show sig X
+show sig lamp
+
+loadusr -w echo "--- t=7.5 yellow time over, back to red"
+loadusr -w sleep 1.0
+show sig X
+show sig lamp
+
+loadusr -w echo "--- t=8.0 hold for 2 s: red stays"
+sets hold 1
+loadusr -w sleep 2.0
+show sig X
+
+loadusr -w echo "--- t=10.0 hold released; red still needs the rest of its 3 s"
+sets hold 0
+loadusr -w sleep 1.0
+show sig X
+loadusr -w sleep 1.5
+loadusr -w echo "--- t=12.5"
+show sig X

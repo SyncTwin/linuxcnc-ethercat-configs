@@ -1,0 +1,148 @@
+# Real output of: halrun -f run_demo.hal
+# linuxcnc-uspace 2.9.0~pre1 (Debian 12 package), POSIX non-realtime, in a container, 2026-10-02
+# Times in the markers are the script's sleeps, not measured; repeated 'Running with fallback_uid' lines removed.
+
+Note: Using POSIX non-realtime
+INFO CLASSICLADDER-   No ladder GUI requested-Realtime runs till HAL closes.
+"--- part 1: normal height"
+Signals:
+Type          Value  Name     (linked to)
+bit           FALSE  X1-wait_part
+                         <== classicladder.0.out-00
+bit           FALSE  X2-check
+                         <== classicladder.0.out-01
+bit           FALSE  X3-reject
+                         <== classicladder.0.out-02
+bit            TRUE  X4-pass
+                         <== classicladder.0.out-03
+bit           FALSE  X5-bin_full
+                         <== classicladder.0.out-04
+
+Signals:
+Type          Value  Name     (linked to)
+bit            TRUE  X1-wait_part
+                         <== classicladder.0.out-00
+bit           FALSE  X2-check
+                         <== classicladder.0.out-01
+bit           FALSE  X3-reject
+                         <== classicladder.0.out-02
+bit           FALSE  X4-pass
+                         <== classicladder.0.out-03
+bit           FALSE  X5-bin_full
+                         <== classicladder.0.out-04
+
+Signals:
+Type          Value  Name     (linked to)
+bit            TRUE  belt
+                         <== classicladder.0.out-05
+
+"--- part 2: tall"
+Signals:
+Type          Value  Name     (linked to)
+bit           FALSE  X1-wait_part
+                         <== classicladder.0.out-00
+bit           FALSE  X2-check
+                         <== classicladder.0.out-01
+bit            TRUE  X3-reject
+                         <== classicladder.0.out-02
+bit           FALSE  X4-pass
+                         <== classicladder.0.out-03
+bit           FALSE  X5-bin_full
+                         <== classicladder.0.out-04
+
+Signals:
+Type          Value  Name     (linked to)
+bit            TRUE  pusher
+                         <== classicladder.0.out-06
+
+Signals:
+Type          Value  Name     (linked to)
+bit            TRUE  X1-wait_part
+                         <== classicladder.0.out-00
+bit           FALSE  X2-check
+                         <== classicladder.0.out-01
+bit           FALSE  X3-reject
+                         <== classicladder.0.out-02
+bit           FALSE  X4-pass
+                         <== classicladder.0.out-03
+bit           FALSE  X5-bin_full
+                         <== classicladder.0.out-04
+
+"--- part 3: tall"
+Signals:
+Type          Value  Name     (linked to)
+bit            TRUE  X1-wait_part
+                         <== classicladder.0.out-00
+bit           FALSE  X2-check
+                         <== classicladder.0.out-01
+bit           FALSE  X3-reject
+                         <== classicladder.0.out-02
+bit           FALSE  X4-pass
+                         <== classicladder.0.out-03
+bit           FALSE  X5-bin_full
+                         <== classicladder.0.out-04
+
+"--- part 4: tall, third reject"
+Signals:
+Type          Value  Name     (linked to)
+bit           FALSE  X1-wait_part
+                         <== classicladder.0.out-00
+bit           FALSE  X2-check
+                         <== classicladder.0.out-01
+bit           FALSE  X3-reject
+                         <== classicladder.0.out-02
+bit           FALSE  X4-pass
+                         <== classicladder.0.out-03
+bit            TRUE  X5-bin_full
+                         <== classicladder.0.out-04
+
+Signals:
+Type          Value  Name     (linked to)
+bit           FALSE  belt
+                         <== classicladder.0.out-05
+
+Signals:
+Type          Value  Name     (linked to)
+bit            TRUE  bin-full-lamp
+                         <== classicladder.0.out-07
+
+"--- a new part arrives while the bin is full: ignored"
+Signals:
+Type          Value  Name     (linked to)
+bit           FALSE  X1-wait_part
+                         <== classicladder.0.out-00
+bit           FALSE  X2-check
+                         <== classicladder.0.out-01
+bit           FALSE  X3-reject
+                         <== classicladder.0.out-02
+bit           FALSE  X4-pass
+                         <== classicladder.0.out-03
+bit            TRUE  X5-bin_full
+                         <== classicladder.0.out-04
+
+"--- operator empties the bin"
+Signals:
+Type          Value  Name     (linked to)
+bit            TRUE  X1-wait_part
+                         <== classicladder.0.out-00
+bit           FALSE  X2-check
+                         <== classicladder.0.out-01
+bit           FALSE  X3-reject
+                         <== classicladder.0.out-02
+bit           FALSE  X4-pass
+                         <== classicladder.0.out-03
+bit           FALSE  X5-bin_full
+                         <== classicladder.0.out-04
+
+Signals:
+Type          Value  Name     (linked to)
+bit            TRUE  belt
+                         <== classicladder.0.out-05
+
+Signals:
+Type          Value  Name     (linked to)
+bit           FALSE  bin-full-lamp
+                         <== classicladder.0.out-07
+
+creating ladder-state
+Note: Using POSIX non-realtime

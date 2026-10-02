@@ -1,0 +1,43 @@
+# Demo run: one batch. Level sensors are set by hand. Usage: halrun -f run_demo.hal
+source tank.hal
+start
+
+loadusr -w echo "--- t=0.0 enable, tank empty"
+sets permit 1
+sets enable 1
+loadusr -w sleep 0.3
+show sig X
+show sig inlet
+
+loadusr -w echo "--- t=0.3 start pressed"
+sets start 1
+loadusr -w sleep 0.3
+sets start 0
+show sig X
+show sig inlet
+
+loadusr -w echo "--- t=1.6 liquid covers the low sensor, then the high one"
+loadusr -w sleep 0.5
+sets level-low 1
+loadusr -w sleep 0.5
+sets level-high 1
+loadusr -w sleep 0.3
+show sig X
+show sig inlet
+show sig mixer
+
+loadusr -w echo "--- t=4.6 mixing time over, draining"
+loadusr -w sleep 3.0
+show sig X
+show sig mixer
+show sig drain-valve
+
+loadusr -w echo "--- t=5.6 level drops below both sensors"
+sets level-high 0
+loadusr -w sleep 0.5
+show sig X
+sets level-low 0
+loadusr -w sleep 0.5
+loadusr -w echo "--- t=6.6 tank empty"
+show sig X
+show sig drain-valve

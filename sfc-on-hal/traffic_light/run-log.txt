@@ -1,0 +1,114 @@
+# Real output of: halrun -f run_demo.hal
+# linuxcnc-uspace 2.9.0~pre1 (Debian 12 package), POSIX non-realtime, in a container, 2026-10-02
+# Times in the markers are the script's sleeps, not measured; repeated 'Running with fallback_uid' lines removed.
+
+Note: Using POSIX non-realtime
+INFO CLASSICLADDER-   No ladder GUI requested-Realtime runs till HAL closes.
+"--- t=0.0 enable"
+Signals:
+Type          Value  Name     (linked to)
+bit            TRUE  X1-red
+                         <== classicladder.0.out-00
+bit           FALSE  X2-green
+                         <== classicladder.0.out-01
+bit           FALSE  X3-yellow
+                         <== classicladder.0.out-02
+
+Signals:
+Type          Value  Name     (linked to)
+bit           FALSE  lamp-green
+                         <== classicladder.0.out-05
+bit            TRUE  lamp-red
+                         <== classicladder.0.out-04
+bit           FALSE  lamp-yellow
+                         <== classicladder.0.out-03
+
+"--- t=3.5 red time over"
+Signals:
+Type          Value  Name     (linked to)
+bit           FALSE  X1-red
+                         <== classicladder.0.out-00
+bit            TRUE  X2-green
+                         <== classicladder.0.out-01
+bit           FALSE  X3-yellow
+                         <== classicladder.0.out-02
+
+Signals:
+Type          Value  Name     (linked to)
+bit            TRUE  lamp-green
+                         <== classicladder.0.out-05
+bit           FALSE  lamp-red
+                         <== classicladder.0.out-04
+bit           FALSE  lamp-yellow
+                         <== classicladder.0.out-03
+
+"--- t=6.5 green time over"
+Signals:
+Type          Value  Name     (linked to)
+bit           FALSE  X1-red
+                         <== classicladder.0.out-00
+bit           FALSE  X2-green
+                         <== classicladder.0.out-01
+bit            TRUE  X3-yellow
+                         <== classicladder.0.out-02
+
+Signals:
+Type          Value  Name     (linked to)
+bit           FALSE  lamp-green
+                         <== classicladder.0.out-05
+bit           FALSE  lamp-red
+                         <== classicladder.0.out-04
+bit            TRUE  lamp-yellow
+                         <== classicladder.0.out-03
+
+"--- t=7.5 yellow time over, back to red"
+Signals:
+Type          Value  Name     (linked to)
+bit            TRUE  X1-red
+                         <== classicladder.0.out-00
+bit           FALSE  X2-green
+                         <== classicladder.0.out-01
+bit           FALSE  X3-yellow
+                         <== classicladder.0.out-02
+
+Signals:
+Type          Value  Name     (linked to)
+bit           FALSE  lamp-green
+                         <== classicladder.0.out-05
+bit            TRUE  lamp-red
+                         <== classicladder.0.out-04
+bit           FALSE  lamp-yellow
+                         <== classicladder.0.out-03
+
+"--- t=8.0 hold for 2 s: red stays"
+Signals:
+Type          Value  Name     (linked to)
+bit            TRUE  X1-red
+                         <== classicladder.0.out-00
+bit           FALSE  X2-green
+                         <== classicladder.0.out-01
+bit           FALSE  X3-yellow
+                         <== classicladder.0.out-02
+
+"--- t=10.0 hold released; red still needs the rest of its 3 s"
+Signals:
+Type          Value  Name     (linked to)
+bit            TRUE  X1-red
+                         <== classicladder.0.out-00
+bit           FALSE  X2-green
+                         <== classicladder.0.out-01
+bit           FALSE  X3-yellow
+                         <== classicladder.0.out-02
+
+"--- t=12.5"
+Signals:
+Type          Value  Name     (linked to)
+bit           FALSE  X1-red
+                         <== classicladder.0.out-00
+bit            TRUE  X2-green
+                         <== classicladder.0.out-01
+bit           FALSE  X3-yellow
+                         <== classicladder.0.out-02
+
+creating ladder-state
+Note: Using POSIX non-realtime

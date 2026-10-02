@@ -1,0 +1,53 @@
+# Demo run: one normal part, three tall parts, bin full, bin emptied. Usage: halrun -f run_demo.hal
+source sorter.hal
+start
+sets permit 1
+sets enable 1
+loadusr -w sleep 0.3
+
+loadusr -w echo "--- part 1: normal height"
+sets part 1
+loadusr -w sleep 0.7
+show sig X
+loadusr -w sleep 1.0
+sets part 0
+show sig X
+show sig belt
+
+loadusr -w echo "--- part 2: tall"
+sets tall 1
+sets part 1
+loadusr -w sleep 0.7
+show sig X
+show sig pusher
+loadusr -w sleep 1.0
+sets part 0
+show sig X
+
+loadusr -w echo "--- part 3: tall"
+sets part 1
+loadusr -w sleep 1.7
+sets part 0
+show sig X
+
+loadusr -w echo "--- part 4: tall, third reject"
+sets part 1
+loadusr -w sleep 1.7
+sets part 0
+show sig X
+show sig belt
+show sig bin-full-lamp
+
+loadusr -w echo "--- a new part arrives while the bin is full: ignored"
+sets part 1
+loadusr -w sleep 0.7
+sets part 0
+show sig X
+
+loadusr -w echo "--- operator empties the bin"
+sets bin-emptied 1
+loadusr -w sleep 0.2
+sets bin-emptied 0
+show sig X
+show sig belt
+show sig bin-full-lamp

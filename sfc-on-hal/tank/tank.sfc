@@ -1,0 +1,52 @@
+PROGRAM Tank
+VAR_INPUT
+  t_mix : TIME := T#3s;
+END_VAR
+VAR
+  start_edge : R_TRIG;
+END_VAR
+INITIAL_STEP idle:
+  watch_start(N);
+  close_drain(N);
+END_STEP
+TRANSITION FROM idle TO fill := start_edge.Q;
+END_TRANSITION
+STEP fill:
+  open_inlet(N);
+END_STEP
+TRANSITION FROM fill TO mix := level_high;
+END_TRANSITION
+STEP mix:
+  close_inlet(N);
+  mixer_on(N);
+END_STEP
+TRANSITION FROM mix TO drain := mix.T >= t_mix;
+END_TRANSITION
+STEP drain:
+  mixer_off(N);
+  open_drain(N);
+END_STEP
+TRANSITION FROM drain TO idle := NOT level_low;
+END_TRANSITION
+ACTION watch_start:
+  start_edge(CLK := start);
+END_ACTION
+ACTION open_inlet:
+  inlet := TRUE;
+END_ACTION
+ACTION close_inlet:
+  inlet := FALSE;
+END_ACTION
+ACTION mixer_on:
+  mixer := TRUE;
+END_ACTION
+ACTION mixer_off:
+  mixer := FALSE;
+END_ACTION
+ACTION open_drain:
+  drain_valve := TRUE;
+END_ACTION
+ACTION close_drain:
+  drain_valve := FALSE;
+END_ACTION
+END_PROGRAM

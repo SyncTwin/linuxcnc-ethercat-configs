@@ -1,0 +1,68 @@
+PROGRAM Sorter
+VAR
+  part_edge : R_TRIG;
+  rejects   : CTU;
+END_VAR
+INITIAL_STEP wait_part:
+  watch_part(N);
+  belt_on(N);
+  pusher_back(N);
+  lamp_off(N);
+END_STEP
+TRANSITION FROM wait_part TO check := part_edge.Q;
+END_TRANSITION
+STEP check:
+  belt_off(N);
+END_STEP
+TRANSITION FROM check TO reject := check.T >= T#500ms AND tall;
+END_TRANSITION
+TRANSITION FROM check TO pass := check.T >= T#500ms AND NOT tall;
+END_TRANSITION
+STEP reject:
+  pusher_out(N);
+  count_reject(N);
+END_STEP
+TRANSITION FROM reject TO wait_part := reject.T >= T#1s AND NOT rejects.Q;
+END_TRANSITION
+TRANSITION FROM reject TO bin_full := reject.T >= T#1s AND rejects.Q;
+END_TRANSITION
+STEP pass:
+  belt_on(N);
+END_STEP
+TRANSITION FROM pass TO wait_part := pass.T >= T#1s;
+END_TRANSITION
+STEP bin_full:
+  pusher_back(N);
+  lamp_on(N);
+  reset_count(N);
+END_STEP
+TRANSITION FROM bin_full TO wait_part := bin_emptied;
+END_TRANSITION
+ACTION watch_part:
+  part_edge(CLK := part);
+END_ACTION
+ACTION belt_on:
+  belt := TRUE;
+END_ACTION
+ACTION belt_off:
+  belt := FALSE;
+END_ACTION
+ACTION pusher_out:
+  pusher := TRUE;
+END_ACTION
+ACTION pusher_back:
+  pusher := FALSE;
+END_ACTION
+ACTION count_reject:
+  rejects(CU := TRUE, PV := 3);
+END_ACTION
+ACTION reset_count:
+  rejects(CU := FALSE, R := TRUE, PV := 3);
+END_ACTION
+ACTION lamp_on:
+  bin_full_lamp := TRUE;
+END_ACTION
+ACTION lamp_off:
+  bin_full_lamp := FALSE;
+END_ACTION
+END_PROGRAM
