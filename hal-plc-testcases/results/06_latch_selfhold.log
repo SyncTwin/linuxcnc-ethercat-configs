@@ -1,0 +1,14 @@
+Note: Using POSIX realtime
+Signals:
+Type          Value  Name     (linked to)
+bit            TRUE  run
+                         <== and2.0.out
+                         ==> or2.0.in1
+
+Signals:
+Type          Value  Name     (linked to)
+bit           FALSE  run
+                         <== and2.0.out
+                         ==> or2.0.in1
+
+Note: Using POSIX realtime

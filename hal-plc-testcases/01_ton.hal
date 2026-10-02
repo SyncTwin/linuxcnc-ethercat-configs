@@ -1,0 +1,14 @@
+# CODESYS/IEC 61131-3: TON (on-delay timer)
+# HAL: timedelay
+# Ожидание: через 0.2 с после подачи входа out ещё 0, после 0.6 с — 1
+loadrt threads name1=t period1=1000000
+loadrt timedelay count=1
+addf timedelay.0 t
+setp timedelay.0.on-delay 0.5
+setp timedelay.0.off-delay 0
+start
+setp timedelay.0.in 1
+loadusr -w sleep 0.2
+show pin timedelay
+loadusr -w sleep 0.6
+show pin timedelay

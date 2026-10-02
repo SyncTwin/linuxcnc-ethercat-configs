@@ -1,0 +1,64 @@
+Note: Using POSIX realtime
+Component Pins:
+Owner   Type  Dir         Value  Name
+     8  float IN             12  limit1.0.in
+     8  float IN              5  limit1.0.max
+     8  float IN             -5  limit1.0.min
+     8  float OUT             5  limit1.0.out
+     8  s32   OUT            64  limit1.0.time
+
+Component Pins:
+Owner   Type  Dir         Value  Name
+    11  float IN            100  limit2.0.in
+    11  bit   IN          FALSE  limit2.0.load
+    11  float IN            100  limit2.0.max
+    11  float IN              5  limit2.0.maxv
+    11  float IN           -100  limit2.0.min
+    11  float OUT         0.265  limit2.0.out
+    11  s32   OUT            32  limit2.0.time
+
+Component Pins:
+Owner   Type  Dir         Value  Name
+    14  bit   IN           TRUE  limit3.0.enable
+    14  float IN            100  limit3.0.in
+    14  bit   IN          FALSE  limit3.0.load
+    14  float IN            100  limit3.0.max
+    14  float IN             10  limit3.0.maxa
+    14  float IN              5  limit3.0.maxv
+    14  float IN           -100  limit3.0.min
+    14  float OUT       0.01431  limit3.0.out
+    14  u32   IN     0x00000002  limit3.0.smooth-steps
+    14  s32   OUT           224  limit3.0.time
+
+Component Pins:
+Owner   Type  Dir         Value  Name
+     8  float IN            -12  limit1.0.in
+     8  float IN              5  limit1.0.max
+     8  float IN             -5  limit1.0.min
+     8  float OUT            -5  limit1.0.out
+     8  s32   OUT            32  limit1.0.time
+
+Component Pins:
+Owner   Type  Dir         Value  Name
+    11  float IN            100  limit2.0.in
+    11  bit   IN          FALSE  limit2.0.load
+    11  float IN            100  limit2.0.max
+    11  float IN              5  limit2.0.maxv
+    11  float IN           -100  limit2.0.min
+    11  float OUT          2.52  limit2.0.out
+    11  s32   OUT            64  limit2.0.time
+
+Component Pins:
+Owner   Type  Dir         Value  Name
+    14  bit   IN           TRUE  limit3.0.enable
+    14  float IN            100  limit3.0.in
+    14  bit   IN          FALSE  limit3.0.load
+    14  float IN            100  limit3.0.max
+    14  float IN             10  limit3.0.maxa
+    14  float IN              5  limit3.0.maxv
+    14  float IN           -100  limit3.0.min
+    14  float OUT        1.2725  limit3.0.out
+    14  u32   IN     0x00000002  limit3.0.smooth-steps
+    14  s32   OUT            96  limit3.0.time
+
+Note: Using POSIX realtime

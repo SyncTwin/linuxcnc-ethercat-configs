@@ -1,0 +1,18 @@
+Note: Using POSIX realtime
+Component Pins:
+Owner   Type  Dir         Value  Name
+     8  bit   IN           TRUE  watchdog.enable-in
+     8  bit   IN           TRUE  watchdog.input-0
+     8  bit   OUT          TRUE  watchdog.ok-out
+     8  s32   OUT            64  watchdog.process.time
+     8  s32   OUT            32  watchdog.set-timeouts.time
+
+Component Pins:
+Owner   Type  Dir         Value  Name
+     8  bit   IN           TRUE  watchdog.enable-in
+     8  bit   IN           TRUE  watchdog.input-0
+     8  bit   OUT         FALSE  watchdog.ok-out
+     8  s32   OUT            96  watchdog.process.time
+     8  s32   OUT            32  watchdog.set-timeouts.time
+
+Note: Using POSIX realtime

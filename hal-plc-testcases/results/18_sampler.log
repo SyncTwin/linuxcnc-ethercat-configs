@@ -1,0 +1,12 @@
+Note: Using POSIX realtime
+Component Pins:
+Owner   Type  Dir         Value  Name
+    11  s32   OUT           303  sampler.0.curr-depth
+    11  bit   IN           TRUE  sampler.0.enable
+    11  bit   OUT         FALSE  sampler.0.full
+    11  s32   I/O             0  sampler.0.overruns
+    11  float IN    -0.09410836  sampler.0.pin.0 <== s
+    11  s32   I/O             0  sampler.0.sample-num
+    11  s32   OUT           608  sampler.0.time
+
+Note: Using POSIX realtime

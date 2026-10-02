@@ -1,0 +1,14 @@
+# CODESYS: библиотечный PID. HAL: pid (штатный компонент)
+loadrt threads name1=t period1=1000000
+loadrt pid num_chan=1
+addf pid.0.do-pid-calcs t
+setp pid.0.Pgain 10
+setp pid.0.Igain 1
+setp pid.0.Dgain 0
+setp pid.0.maxoutput 100
+setp pid.0.enable 1
+setp pid.0.command 5
+setp pid.0.feedback 0
+start
+loadusr -w sleep 0.2
+show pin pid

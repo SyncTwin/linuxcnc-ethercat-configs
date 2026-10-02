@@ -1,0 +1,18 @@
+Note: Using POSIX realtime
+Component Pins:
+Owner   Type  Dir         Value  Name
+     8  float IN             10  mux2.0.in0
+     8  float IN             20  mux2.0.in1
+     8  float OUT            10  mux2.0.out
+     8  bit   IN          FALSE  mux2.0.sel
+     8  s32   OUT            32  mux2.0.time
+
+Component Pins:
+Owner   Type  Dir         Value  Name
+     8  float IN             10  mux2.0.in0
+     8  float IN             20  mux2.0.in1
+     8  float OUT            20  mux2.0.out
+     8  bit   IN           TRUE  mux2.0.sel
+     8  s32   OUT            32  mux2.0.time
+
+Note: Using POSIX realtime

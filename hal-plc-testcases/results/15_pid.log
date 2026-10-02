@@ -1,0 +1,39 @@
+Note: Using POSIX realtime
+Component Pins:
+Owner   Type  Dir         Value  Name
+     8  float IN              0  pid.0.Dgain
+     8  float IN              0  pid.0.FF0
+     8  float IN              0  pid.0.FF1
+     8  float IN              0  pid.0.FF2
+     8  float IN              0  pid.0.FF3
+     8  float IN              1  pid.0.Igain
+     8  float IN             10  pid.0.Pgain
+     8  float IN              0  pid.0.bias
+     8  float IN              5  pid.0.command
+     8  float IN              0  pid.0.command-deriv
+     8  float IN              0  pid.0.deadband
+     8  s32   OUT           192  pid.0.do-pid-calcs.time
+     8  bit   IN           TRUE  pid.0.enable
+     8  float OUT             5  pid.0.error
+     8  bit   IN           TRUE  pid.0.error-previous-target
+     8  float IN              0  pid.0.feedback
+     8  float IN              0  pid.0.feedback-deriv
+     8  bit   IN          FALSE  pid.0.index-enable
+     8  float IN              0  pid.0.maxcmdD
+     8  float IN              0  pid.0.maxcmdDD
+     8  float IN              0  pid.0.maxcmdDDD
+     8  float IN              0  pid.0.maxerror
+     8  float IN              0  pid.0.maxerrorD
+     8  float IN              0  pid.0.maxerrorI
+     8  float IN            100  pid.0.maxoutput
+     8  float OUT        51.005  pid.0.output
+     8  bit   OUT         FALSE  pid.0.saturated
+     8  s32   OUT             0  pid.0.saturated-count
+     8  float OUT             0  pid.0.saturated-s
+     8  u32   I/O    0x00000032  pid.0.tune-cycles
+     8  float I/O           0.5  pid.0.tune-effort
+     8  bit   IN          FALSE  pid.0.tune-mode
+     8  bit   I/O         FALSE  pid.0.tune-start
+     8  u32   I/O    0x00000000  pid.0.tune-type
+
+Note: Using POSIX realtime

@@ -1,0 +1,40 @@
+Note: Using POSIX realtime
+Component Pins:
+Owner   Type  Dir         Value  Name
+     8  float IN              2  sum2.0.in0
+     8  float IN              3  sum2.0.in1
+     8  float OUT             5  sum2.0.out
+     8  s32   OUT            64  sum2.0.time
+
+Component Pins:
+Owner   Type  Dir         Value  Name
+    11  float IN              4  mult2.0.in0
+    11  float IN            2.5  mult2.0.in1
+    11  float OUT            10  mult2.0.out
+    11  s32   OUT            64  mult2.0.time
+
+Component Pins:
+Owner   Type  Dir         Value  Name
+    14  float IN              9  div2.0.in0
+    14  float IN              2  div2.0.in1
+    14  float OUT           4.5  div2.0.out
+    14  s32   OUT            64  div2.0.time
+
+Component Pins:
+Owner   Type  Dir         Value  Name
+    17  float IN           -7.5  abs.0.in
+    17  bit   OUT          TRUE  abs.0.is-negative
+    17  bit   OUT         FALSE  abs.0.is-positive
+    17  float OUT           7.5  abs.0.out
+    17  bit   OUT          TRUE  abs.0.sign
+    17  s32   OUT            64  abs.0.time
+
+Component Pins:
+Owner   Type  Dir         Value  Name
+    20  float IN             -4  minmax.0.in
+    20  float OUT            11  minmax.0.max
+    20  float OUT            -4  minmax.0.min
+    20  bit   IN          FALSE  minmax.0.reset
+    20  s32   OUT            96  minmax.0.time
+
+Note: Using POSIX realtime

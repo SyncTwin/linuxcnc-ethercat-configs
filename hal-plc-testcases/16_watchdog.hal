@@ -1,0 +1,36 @@
+# CODESYS: watchdog задачи. HAL: watchdog (следит за живостью источника сигнала)
+#
+# ⚠ ПЕРВАЯ РЕДАКЦИЯ ПОКАЗЫВАЛА ТОЛЬКО ПОЛОВИНУ: вход `input-0` не дёргался ни
+# разу, ok-out уходил в FALSE, и это одинаково объясняется и работой сторожа, и
+# тем, что он просто никогда не бывает TRUE. Позитивный путь — «сторож держит
+# OK, ПОКА сигнал жив» — не был проверен, а именно он отличает сторожа от
+# постоянного нуля.
+#
+# Сторож ждёт СМЕНЫ состояния входа (это его признак жизни), а не уровня:
+# застывшая единица для него такое же молчание, как застывший ноль.
+loadrt threads name1=t period1=1000000
+loadrt watchdog num_inputs=1
+addf watchdog.set-timeouts t
+addf watchdog.process t
+setp watchdog.timeout-0 0.2
+setp watchdog.enable-in 1
+start
+
+# --- 1. СИГНАЛ ЖИВ: дёргаем вход быстрее таймаута (0,2 с) ---
+setp watchdog.input-0 1
+loadusr -w sleep 0.05
+setp watchdog.input-0 0
+loadusr -w sleep 0.05
+setp watchdog.input-0 1
+loadusr -w sleep 0.05
+setp watchdog.input-0 0
+loadusr -w sleep 0.05
+setp watchdog.input-0 1
+# ok-out обязан быть TRUE: источник подаёт признаки жизни.
+show pin watchdog
+
+# --- 2. ИСТОЧНИК ЗАМОЛЧАЛ: вход больше не меняется дольше таймаута ---
+loadusr -w sleep 0.5
+# ok-out = FALSE. Значение входа при этом ОСТАЛОСЬ прежним (TRUE) — сторож
+# ловит отсутствие ОБНОВЛЕНИЙ, а не нулевой уровень.
+show pin watchdog

@@ -1,0 +1,20 @@
+Note: Using POSIX realtime
+Component Pins:
+Owner   Type  Dir         Value  Name
+     8  s32   OUT             0  updown.0.count
+     8  bit   IN          FALSE  updown.0.countdown
+     8  bit   IN          FALSE  updown.0.countup
+
+Component Pins:
+Owner   Type  Dir         Value  Name
+     8  s32   OUT             1  updown.0.count
+     8  bit   IN          FALSE  updown.0.countdown
+     8  bit   IN          FALSE  updown.0.countup
+
+Component Pins:
+Owner   Type  Dir         Value  Name
+     8  s32   OUT             2  updown.0.count
+     8  bit   IN          FALSE  updown.0.countdown
+     8  bit   IN          FALSE  updown.0.countup
+
+Note: Using POSIX realtime

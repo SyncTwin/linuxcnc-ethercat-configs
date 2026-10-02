@@ -1,0 +1,44 @@
+# IEC: ADD/MUL/DIV/ABS/MIN/MAX. HAL: sum2, mult2, div2, abs, minmax
+#
+# ⚠ ПЕРВАЯ РЕДАКЦИЯ НЕ ГРУЗИЛА `minmax`, хотя строка таблицы ссылалась на этот
+# кейс и числила MIN/MAX прогнанными. Родня компонентов в шапке — не то же
+# самое, что список `loadrt`.
+loadrt threads name1=t period1=1000000
+loadrt sum2 count=1
+loadrt mult2 count=1
+loadrt div2 count=1
+loadrt abs count=1
+loadrt minmax count=1
+addf sum2.0 t
+addf mult2.0 t
+addf div2.0 t
+addf abs.0 t
+addf minmax.0 t
+setp sum2.0.in0 2
+setp sum2.0.in1 3
+setp mult2.0.in0 4
+setp mult2.0.in1 2.5
+setp div2.0.in0 9
+setp div2.0.in1 2
+setp abs.0.in -7.5
+start
+loadusr -w sleep 0.1
+show pin sum2
+loadusr -w sleep 0.05
+show pin mult2
+loadusr -w sleep 0.05
+show pin div2
+loadusr -w sleep 0.05
+show pin abs
+
+# --- minmax: держит НАИМЕНЬШЕЕ и НАИБОЛЬШЕЕ из виденного, а не из двух входов ---
+# Это отличие от IEC-функций MIN/MAX и стоит того, чтобы его увидеть: компонент
+# следит за величиной во времени. Подаём 3 → 11 → -4 и смотрим границы.
+setp minmax.0.in 3
+loadusr -w sleep 0.05
+setp minmax.0.in 11
+loadusr -w sleep 0.05
+setp minmax.0.in -4
+loadusr -w sleep 0.05
+# Ожидание: min = -4, max = 11 при текущем in = -4.
+show pin minmax

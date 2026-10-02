@@ -1,0 +1,24 @@
+# Классика ПЛК: пуск-стоп с самоудержанием на голых блоках
+# Ожидание: run=1 после btn-start, держится сам, гаснет по btn-stop
+loadrt threads name1=t period1=1000000
+loadrt or2 count=1
+loadrt not count=1
+loadrt and2 count=1
+addf or2.0 t
+addf not.0 t
+addf and2.0 t
+net btn-start => or2.0.in0
+net run => or2.0.in1
+net latched or2.0.out => and2.0.in0
+net btn-stop => not.0.in
+net stop-n not.0.out => and2.0.in1
+net run and2.0.out
+start
+sets btn-start 1
+loadusr -w sleep 0.1
+sets btn-start 0
+loadusr -w sleep 0.1
+show sig run
+sets btn-stop 1
+loadusr -w sleep 0.1
+show sig run

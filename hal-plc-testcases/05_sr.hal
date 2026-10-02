@@ -1,0 +1,16 @@
+# IEC: SR / RS (защёлка). HAL: flipflop (D-триггер) либо or2+and2+not
+# Ожидание: out встаёт по set и держится до reset
+loadrt threads name1=t period1=1000000
+loadrt flipflop count=1
+addf flipflop.0 t
+start
+setp flipflop.0.set 1
+loadusr -w sleep 0.05
+setp flipflop.0.set 0
+loadusr -w sleep 0.05
+show pin flipflop
+setp flipflop.0.reset 1
+loadusr -w sleep 0.05
+setp flipflop.0.reset 0
+loadusr -w sleep 0.05
+show pin flipflop

@@ -1,0 +1,23 @@
+# IEC: CTU / CTD / CTUD (счётчики). HAL: updown
+# ⚠ Первый прогон 21.08 показал 1 вместо 2: `updown` инициализирует своё
+# «прошлое» состояние в первом такте, и фронт, поданный раньше, съедается.
+# Отсюда пауза после start и снимок ПОСЛЕ КАЖДОГО фронта.
+# Ожидание: 0 → 1 → 2, затем зажим на max=3 (clamp), четвёртый фронт не считается.
+loadrt threads name1=t period1=1000000
+loadrt updown count=1
+addf updown.0 t
+setp updown.0.max 3
+setp updown.0.clamp 1
+start
+loadusr -w sleep 0.2             # поток встал, «прошлое» состояние определено
+show pin updown.0.count          # 0
+setp updown.0.countup 1
+loadusr -w sleep 0.05
+setp updown.0.countup 0
+loadusr -w sleep 0.05
+show pin updown.0.count          # 1
+setp updown.0.countup 1
+loadusr -w sleep 0.05
+setp updown.0.countup 0
+loadusr -w sleep 0.05
+show pin updown.0.count          # 2

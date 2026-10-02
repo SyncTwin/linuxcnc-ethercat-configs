@@ -1,0 +1,12 @@
+Note: Using POSIX realtime
+Component Pins:
+Owner   Type  Dir         Value  Name
+     8  bit   IN           TRUE  lut5.0.in-0
+     8  bit   IN           TRUE  lut5.0.in-1
+     8  bit   IN          FALSE  lut5.0.in-2
+     8  bit   IN          FALSE  lut5.0.in-3
+     8  bit   IN          FALSE  lut5.0.in-4
+     8  bit   OUT          TRUE  lut5.0.out
+     8  s32   OUT            64  lut5.0.time
+
+Note: Using POSIX realtime

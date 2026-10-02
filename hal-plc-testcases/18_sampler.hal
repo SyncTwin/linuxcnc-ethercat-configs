@@ -1,0 +1,11 @@
+# CODESYS: трассировка переменных. HAL: sampler (+ halscope как осциллограф)
+loadrt threads name1=t period1=1000000
+loadrt siggen num_chan=1
+loadrt sampler depth=1000 cfg=f
+addf siggen.0.update t
+addf sampler.0 t
+setp siggen.0.frequency 5
+net s siggen.0.sine => sampler.0.pin.0
+start
+loadusr -w sleep 0.3
+show pin sampler

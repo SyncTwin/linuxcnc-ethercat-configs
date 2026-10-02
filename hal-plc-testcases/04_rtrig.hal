@@ -1,0 +1,23 @@
+# IEC: R_TRIG / F_TRIG (детекторы фронта). HAL: edge
+# Импульс edge длится один такт и в show не попадает — считаем фронты счётчиком.
+# ⚠ Дефолт компонента `in-edge` = TRUE, то есть СПАД. Первый прогон 21.08 это и
+# поймал: счётчик стоял на 0, пока вход держался, и стал 1 ПОСЛЕ снятия. Фронт
+# задаём явно, иначе кейс доказывает не то, что написано в заголовке.
+# Ожидание: RISING — вход держится 0.4 с, счётчик РОВНО 1; снятие входа его не меняет.
+loadrt threads name1=t period1=1000000
+loadrt edge count=1
+loadrt updown count=1
+addf edge.0 t
+addf updown.0 t
+setp edge.0.in-edge 0            # 0 = rising (R_TRIG), 1 = falling (F_TRIG)
+net trig edge.0.out => updown.0.countup
+start
+loadusr -w sleep 0.2             # даём потоку встать: иначе первый такт сравнивает
+                                 # вход с тем, что было в момент запуска — гонка
+show pin updown.0.count          # до события: ожидаем 0
+setp edge.0.in 1
+loadusr -w sleep 0.4
+show pin updown.0.count          # после ВОСХОДЯЩЕГО фронта: ожидаем 1
+setp edge.0.in 0
+loadusr -w sleep 0.3
+show pin updown.0.count          # спад не считается: всё ещё 1

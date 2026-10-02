@@ -1,0 +1,50 @@
+# IEC: LIMIT. HAL: limit1 (значение), limit2 (+скорость), limit3 (+ускорение)
+# limit2/limit3 в CODESYS-библиотеке прямого аналога не имеют — это RAMP/профиль.
+#
+# ⚠ ПЕРВАЯ РЕДАКЦИЯ ГРУЗИЛА ТОЛЬКО `limit1`, хотя строка «RAMP» в таблице
+# покрытия ссылалась на этот же кейс и числилась прогнанной. Шапка перечисляла
+# всю родню компонентов, `loadrt` — один из них: комментарий это замысел, а
+# доказательство — то, что реально исполнилось.
+loadrt threads name1=t period1=1000000
+loadrt limit1 count=1
+loadrt limit2 count=1
+loadrt limit3 count=1
+addf limit1.0 t
+addf limit2.0 t
+addf limit3.0 t
+
+# --- limit1: зажим ЗНАЧЕНИЯ в диапазон ---
+setp limit1.0.min -5
+setp limit1.0.max 5
+
+# --- limit2: то же плюс потолок СКОРОСТИ изменения (5 единиц/с) ---
+setp limit2.0.min -100
+setp limit2.0.max 100
+setp limit2.0.maxv 5
+setp limit2.0.load 0          # начать с нуля, а не с мусора
+
+# --- limit3: плюс потолок УСКОРЕНИЯ (10 единиц/с²) ---
+setp limit3.0.min -100
+setp limit3.0.max 100
+setp limit3.0.maxv 5
+setp limit3.0.maxa 10
+setp limit3.0.load 0
+start
+
+setp limit1.0.in 12
+setp limit2.0.in 100
+setp limit3.0.in 100
+loadusr -w sleep 0.05
+# limit1: out = 5 (зажат потолком). limit2/limit3 за 50 мс успевают уехать
+# от нуля лишь на доли единицы: 5 ед/с × 0,05 с ≈ 0,25 — это и есть RAMP.
+show pin limit1
+show pin limit2
+show pin limit3
+
+setp limit1.0.in -12
+loadusr -w sleep 0.45
+# limit1 мгновенно на -5. limit2 за полсекунды прошёл ≈ 2,5 единицы;
+# limit3 отстаёт от него — ему пришлось ещё и разгоняться (maxa).
+show pin limit1
+show pin limit2
+show pin limit3

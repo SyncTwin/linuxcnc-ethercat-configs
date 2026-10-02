@@ -1,0 +1,9 @@
+# CODESYS: несколько задач с разными периодами и приоритетами
+# HAL: несколько потоков; функция кладётся в тот, чей период ей нужен
+loadrt threads name1=fast period1=50000 name2=slow period2=1000000
+loadrt siggen num_chan=2
+addf siggen.0.update fast
+addf siggen.1.update slow
+start
+loadusr -w sleep 0.5
+show thread

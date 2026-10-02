@@ -1,0 +1,18 @@
+Note: Using POSIX realtime
+Component Pins:
+Owner   Type  Dir         Value  Name
+     8  float IN          0.625  scale.0.gain
+     8  float IN              4  scale.0.in
+     8  float IN           -2.5  scale.0.offset
+     8  float OUT             0  scale.0.out
+     8  s32   OUT            32  scale.0.time
+
+Component Pins:
+Owner   Type  Dir         Value  Name
+     8  float IN          0.625  scale.0.gain
+     8  float IN             20  scale.0.in
+     8  float IN           -2.5  scale.0.offset
+     8  float OUT            10  scale.0.out
+     8  s32   OUT            32  scale.0.time
+
+Note: Using POSIX realtime

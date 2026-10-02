@@ -1,0 +1,16 @@
+# CODESYS: масштабирование аналогового входа 4-20 мА. HAL: scale + offset
+# Ожидание: 4 мА -> 0 бар, 20 мА -> 10 бар
+loadrt threads name1=t period1=1000000
+loadrt scale count=1
+loadrt offset count=1
+addf scale.0 t
+addf offset.0.update-output t
+setp scale.0.gain 0.625
+setp scale.0.offset -2.5
+start
+setp scale.0.in 4
+loadusr -w sleep 0.1
+show pin scale
+setp scale.0.in 20
+loadusr -w sleep 0.1
+show pin scale

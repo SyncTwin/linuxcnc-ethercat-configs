@@ -1,0 +1,14 @@
+Note: Using POSIX realtime
+Component Pins:
+Owner   Type  Dir         Value  Name
+     8  bit   IN           TRUE  debounce.0.0.in
+     8  bit   OUT         FALSE  debounce.0.0.out
+     8  s32   OUT            96  debounce.0.time
+
+Component Pins:
+Owner   Type  Dir         Value  Name
+     8  bit   IN           TRUE  debounce.0.0.in
+     8  bit   OUT          TRUE  debounce.0.0.out
+     8  s32   OUT            64  debounce.0.time
+
+Note: Using POSIX realtime

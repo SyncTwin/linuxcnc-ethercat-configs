@@ -1,0 +1,22 @@
+Note: Using POSIX realtime
+Component Pins:
+Owner   Type  Dir         Value  Name
+     8  bit   IN          FALSE  flipflop.0.clk
+     8  bit   IN          FALSE  flipflop.0.data
+     8  bit   I/O          TRUE  flipflop.0.out
+     8  bit   I/O         FALSE  flipflop.0.out-not
+     8  bit   IN          FALSE  flipflop.0.reset
+     8  bit   IN          FALSE  flipflop.0.set
+     8  s32   OUT            32  flipflop.0.time
+
+Component Pins:
+Owner   Type  Dir         Value  Name
+     8  bit   IN          FALSE  flipflop.0.clk
+     8  bit   IN          FALSE  flipflop.0.data
+     8  bit   I/O         FALSE  flipflop.0.out
+     8  bit   I/O          TRUE  flipflop.0.out-not
+     8  bit   IN          FALSE  flipflop.0.reset
+     8  bit   IN          FALSE  flipflop.0.set
+     8  s32   OUT            64  flipflop.0.time
+
+Note: Using POSIX realtime

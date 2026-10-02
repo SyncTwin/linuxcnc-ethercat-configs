@@ -1,0 +1,20 @@
+Note: Using POSIX realtime
+Component Pins:
+Owner   Type  Dir         Value  Name
+    11  s32   OUT             0  updown.0.count
+    11  bit   IN          FALSE  updown.0.countdown
+    11  bit   IN          FALSE  updown.0.countup <== trig
+
+Component Pins:
+Owner   Type  Dir         Value  Name
+    11  s32   OUT             1  updown.0.count
+    11  bit   IN          FALSE  updown.0.countdown
+    11  bit   IN          FALSE  updown.0.countup <== trig
+
+Component Pins:
+Owner   Type  Dir         Value  Name
+    11  s32   OUT             1  updown.0.count
+    11  bit   IN          FALSE  updown.0.countdown
+    11  bit   IN          FALSE  updown.0.countup <== trig
+
+Note: Using POSIX realtime

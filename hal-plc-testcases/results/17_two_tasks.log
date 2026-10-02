@@ -1,0 +1,12 @@
+Note: Using POSIX realtime
+Unexpected realtime delay on task 0 with period 50000
+This Message will only display once per session.
+Run the Latency Test and resolve before continuing.
+Realtime Threads:
+     Period  FP     Name               (     Time, Max-Time )
+    1000000  YES                  slow (      256,     1440 )
+                  1 siggen.1.update
+      50000  YES                  fast (      288,     3584 )
+                  1 siggen.0.update
+
+Note: Using POSIX realtime

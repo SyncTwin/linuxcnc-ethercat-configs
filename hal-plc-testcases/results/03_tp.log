@@ -1,0 +1,22 @@
+Note: Using POSIX realtime
+Component Pins:
+Owner   Type  Dir         Value  Name
+     8  bit   IN          FALSE  oneshot.0.in
+     8  bit   OUT          TRUE  oneshot.0.out
+     8  bit   OUT         FALSE  oneshot.0.out-not
+     8  bit   IN          FALSE  oneshot.0.reset
+     8  s32   OUT            96  oneshot.0.time
+     8  float OUT         0.147  oneshot.0.time-left
+     8  float IN            0.4  oneshot.0.width
+
+Component Pins:
+Owner   Type  Dir         Value  Name
+     8  bit   IN          FALSE  oneshot.0.in
+     8  bit   OUT         FALSE  oneshot.0.out
+     8  bit   OUT          TRUE  oneshot.0.out-not
+     8  bit   IN          FALSE  oneshot.0.reset
+     8  s32   OUT           256  oneshot.0.time
+     8  float OUT             0  oneshot.0.time-left
+     8  float IN            0.4  oneshot.0.width
+
+Note: Using POSIX realtime

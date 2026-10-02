@@ -1,0 +1,18 @@
+Note: Using POSIX realtime
+Component Pins:
+Owner   Type  Dir         Value  Name
+     8  bit   OUT         FALSE  comp.0.equal
+     8  float IN           0.35  comp.0.in0
+     8  float IN            0.3  comp.0.in1
+     8  bit   OUT         FALSE  comp.0.out
+     8  s32   OUT            32  comp.0.time
+
+Component Pins:
+Owner   Type  Dir         Value  Name
+     8  bit   OUT         FALSE  comp.0.equal
+     8  float IN           0.35  comp.0.in0
+     8  float IN           0.42  comp.0.in1
+     8  bit   OUT          TRUE  comp.0.out
+     8  s32   OUT            32  comp.0.time
+
+Note: Using POSIX realtime

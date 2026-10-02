@@ -1,0 +1,20 @@
+Note: Using POSIX realtime
+Component Pins:
+Owner   Type  Dir         Value  Name
+    62  float OUT         0.203  timedelay.0.elapsed
+    62  bit   IN           TRUE  timedelay.0.in
+    62  float IN              0  timedelay.0.off-delay
+    62  float IN            0.5  timedelay.0.on-delay
+    62  bit   OUT         FALSE  timedelay.0.out
+    62  s32   OUT            64  timedelay.0.time
+
+Component Pins:
+Owner   Type  Dir         Value  Name
+    62  float OUT           0.5  timedelay.0.elapsed
+    62  bit   IN           TRUE  timedelay.0.in
+    62  float IN              0  timedelay.0.off-delay
+    62  float IN            0.5  timedelay.0.on-delay
+    62  bit   OUT          TRUE  timedelay.0.out
+    62  s32   OUT            64  timedelay.0.time
+
+Note: Using POSIX realtime

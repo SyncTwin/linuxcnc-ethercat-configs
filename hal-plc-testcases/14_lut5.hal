@@ -1,0 +1,11 @@
+# CODESYS: ветка LD из нескольких контактов. HAL: lut5 — произвольная функция 5 входов
+# function задаётся битовой маской таблицы истинности
+loadrt threads name1=t period1=1000000
+loadrt lut5 count=1
+addf lut5.0 t
+setp lut5.0.function 0x8
+start
+setp lut5.0.in-0 1
+setp lut5.0.in-1 1
+loadusr -w sleep 0.1
+show pin lut5
